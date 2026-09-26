@@ -4,6 +4,7 @@
  if(!construction||!orbit)return;
  const video=construction.querySelector('video'),picture=orbit.querySelector('img');
  const reduce=matchMedia('(prefers-reduced-motion: reduce)');
+ const autoplay=()=>innerWidth<=900||innerHeight<=600;
  const clamp=x=>Math.max(0,Math.min(1,x));
  const progress=el=>reduce.matches?0:clamp(-el.getBoundingClientRect().top/Math.max(1,el.offsetHeight-innerHeight));
  let raf=0,current=0,last=0,started=false,wantedTime=0,wantedFrame=1,shownFrame=1;
@@ -14,9 +15,9 @@
   const image=new Image();cache.set(n,image);image.onload=()=>{if(n===wantedFrame){picture.src=image.src;shownFrame=n;}};image.src=frameUrl(n);
   if(cache.size>14){for(const key of cache.keys()){if(Math.abs(key-wantedFrame)>5){cache.delete(key);if(cache.size<=10)break;}}}
  }
- function seek(){if((innerHeight<=600)&&!reduce.matches)return;if(video.readyState>=1&&!video.seeking&&Math.abs(video.currentTime-wantedTime)>.045)video.currentTime=wantedTime;}
+ function seek(){if(autoplay()&&!reduce.matches)return;if(video.readyState>=1&&!video.seeking&&Math.abs(video.currentTime-wantedTime)>.045)video.currentTime=wantedTime;}
  video.addEventListener('seeked',seek);
- video.addEventListener('loadedmetadata',()=>{schedule();});video.addEventListener('loadeddata',seek);
+ video.addEventListener('loadedmetadata',()=>{schedule();});video.addEventListener('loadeddata',schedule);
  video.addEventListener('error',()=>{construction.querySelector('.sequence-status').textContent='Видео недоступно';});
  function render(now){
   raf=0;const dt=Math.min(64,now-last||16);last=now;
@@ -25,12 +26,12 @@
   const r=construction.getBoundingClientRect();
   if(!started&&r.top<innerHeight*2){started=true;fetch('assets/assembly/construction.mp4').then(r=>{if(!r.ok)throw new Error('video');return r.blob();}).then(blob=>{video.src=URL.createObjectURL(blob);video.load();}).catch(()=>{construction.querySelector('.sequence-status').textContent='Видео недоступно';});}
   if(Number.isFinite(video.duration)&&video.duration>0){
-   const small=innerHeight<=600;
+   const small=autoplay();
    if(small&&!reduce.matches){
     const model=construction.querySelector('.tech-model').getBoundingClientRect();
-    if(model.top<innerHeight&&model.bottom>0){video.loop=true;if(video.paused)video.play().catch(()=>{});}else video.pause();
+    if(!document.hidden&&model.top<innerHeight&&model.bottom>0){video.loop=true;if(video.paused)video.play().catch(()=>{});}else video.pause();
    }else{video.pause();video.loop=false;wantedTime=(reduce.matches?1:a)*Math.max(0,video.duration-.06);seek();}
-   construction.querySelector('.sequence-status').textContent=`${reduce.matches?100:Math.round(a*100)}%`;
+   construction.querySelector('.sequence-status').textContent=small&&!reduce.matches?'Сборка дома ↻':`${reduce.matches?100:Math.round(a*100)}%`;
   }
   current=reduce.matches?0:current+(b-current)*(1-Math.exp(-dt/150));
   wantedFrame=1+Math.round(current*74);
@@ -44,5 +45,7 @@
   if(Math.abs(b-current)>.001&&!reduce.matches)raf=requestAnimationFrame(render);
  }
  function schedule(){if(!raf)raf=requestAnimationFrame(render);}
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)video.pause();else schedule();});
+ new IntersectionObserver(schedule).observe(construction.querySelector('.tech-model'));
  addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule);reduce.addEventListener('change',schedule);schedule();
 })();

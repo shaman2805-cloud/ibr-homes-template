@@ -35,7 +35,7 @@
  function render(now){
   frame=0;
   const dt=Math.min(64,now-last||16);last=now;
-  const fixed=innerWidth>700&&innerHeight>600&&!reduced.matches;
+  const fixed=innerHeight>600&&!reduced.matches;
   let heroTarget=0;
   if(heroShell){
    const h=heroShell.getBoundingClientRect();
@@ -56,16 +56,27 @@
   target=fixed?clamp(-rect.top/Math.max(1,shell.offsetHeight-innerHeight)):clamp((innerHeight-rect.top)/(shell.offsetHeight+innerHeight*.35));
   current=reduced.matches?target:current+(target-current)*(1-Math.exp(-dt/75));
   scene.style.setProperty('--scene-progress',current.toFixed(4));scene.style.setProperty('--scene-scale',(1.06+current*.06).toFixed(4));
+  const merge= fixed?clamp((current-.48)/.4):0;
+  const easedMerge=merge*merge*(3-2*merge);
+  const copyOpacity=1-clamp((current-.48)/.18);
+  const logoOpacity=fixed?clamp((current-.82)/.13):1;
+  const content=scene.querySelector('.circle-content'), brand=scene.querySelector('.merged-brand');
+  scene.style.setProperty('--merge-logo-opacity',logoOpacity);
+  scene.style.setProperty('--merge-logo-scale',.88+logoOpacity*.12);
   stages.forEach((stage,i)=>{
-   const p=reduced.matches?1:fixed?clamp((current-i*.255)/.34):clamp((innerHeight-stage.getBoundingClientRect().top)/(innerHeight*.8));
+   const p=fixed?clamp((current-i*.045)/.22):1;
    const ease=1-Math.pow(1-p,3);
-   stage.style.setProperty('--stage-y',`${((1-ease)*(60+i*16)).toFixed(2)}px`);
-   stage.style.setProperty('--stage-scale',(.88+ease*.12).toFixed(4));
-   stage.style.setProperty('--stage-opacity',(.3+ease*.7).toFixed(4));
-   stage.style.setProperty('--stage-ring',p.toFixed(4));
-   stage.style.setProperty('--stage-glow',(p>.05&&p<.99?.045:0).toFixed(3));
+   const dx=content.clientWidth/2-stage.offsetLeft-stage.offsetWidth/2;
+   const dy=content.clientHeight/2-stage.offsetTop-stage.offsetHeight/2;
+   const endScale=brand.offsetWidth/Math.max(1,stage.offsetWidth);
+   stage.style.setProperty('--stage-x',`${dx*easedMerge}px`);
+   stage.style.setProperty('--stage-y',`${dy*easedMerge+(1-ease)*50*(1-easedMerge)}px`);
+   stage.style.setProperty('--stage-scale',(.92+ease*.08)*(1-easedMerge)+endScale*easedMerge);
+   stage.style.setProperty('--stage-opacity',fixed?(0.35+ease*.65)*(1-clamp((current-.88)/.09)):1);
+   stage.style.setProperty('--stage-ring',p);
+   stage.style.setProperty('--circle-copy-opacity',fixed?copyOpacity:1);
   });
-  $('.circle-step-label').textContent=`0${Math.min(3,Math.floor(current*3)+1)} / 03`;
+  $('.circle-step-label').textContent=current>.85?'IBR HOMES':`${String(Math.min(3,Math.floor(current/.16)+1)).padStart(2,'0')} / 03`;
   const placement=$('.site-placement'), footer=$('footer');
   if(placement){const r=placement.getBoundingClientRect();const p=clamp((innerHeight-r.top)/(innerHeight+r.height));placement.style.setProperty('--placement-y',`${reduced.matches?0:(p-.5)*70}px`);}
   if(footer){const r=footer.getBoundingClientRect();const p=clamp((innerHeight-r.top)/Math.max(1,innerHeight*.8));footer.style.setProperty('--footer-y',`${reduced.matches?0:(1-p)*65}px`);footer.style.setProperty('--footer-opacity',reduced.matches?1:.4+p*.6);}
