@@ -1,0 +1,50 @@
+/* The house stays visible while the same scroll advances the six benefits. */
+.tech-story.sync-construction{height:auto}
+.sync-construction .house-sequence-sticky{position:relative;height:auto;padding:90px var(--gutter) 60px}
+.sync-construction .sequence-heading{position:static;display:grid;grid-template-columns:1fr 2fr 1fr;gap:30px}
+.sync-construction .tech-story-window{position:static;display:grid;grid-template-columns:1fr;margin:40px 0 0;overflow:visible}
+.sync-construction .tech-model{width:100%;height:400px;grid-column:auto;isolation:isolate}
+.sync-construction .tech-model .construction-video{inset:0;width:100%;height:100%;object-fit:contain}
+.sync-construction .tech-model>p{display:none}
+.sync-construction .tech-model .model-source{bottom:4px;font-size:10px}
+.sync-construction .tech-story-track{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:auto;height:auto;gap:40px;padding:0;transform:none!important;will-change:auto}
+.sync-construction .tech-feature{width:auto;min-width:0;height:auto;opacity:1;transform:none;flex:none}
+.sync-construction .sequence-bottom{position:static;margin-top:35px}
+.sync-construction .sequence-status{display:block}
+.tech-story.sync-construction.is-scrubbing{height:calc(100svh + var(--tech-distance,3500px))}
+.sync-construction.is-scrubbing .house-sequence-sticky{position:sticky;top:0;height:100svh;padding:0;overflow:hidden}
+.sync-construction.is-scrubbing .sequence-heading{position:absolute;top:100px;left:var(--gutter);right:var(--gutter)}
+.sync-construction.is-scrubbing .tech-story-window{position:absolute;inset:245px var(--gutter) 80px;margin:0;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:4vw;overflow:hidden}
+.sync-construction.is-scrubbing .tech-model{height:100%;min-width:0}
+.sync-construction.is-scrubbing .tech-feature-viewport{min-width:0;height:100%;overflow:hidden}
+.sync-construction.is-scrubbing .tech-story-track{display:flex;gap:28px;width:100%;height:100%;transform:translate3d(var(--tech-offset,0px),0,0)!important;will-change:transform}
+.sync-construction.is-scrubbing .tech-feature{flex:0 0 100%;width:100%;height:100%;opacity:.2;transform:translateY(16px);transition:opacity .35s,transform .45s}
+.sync-construction.is-scrubbing .tech-feature-active{opacity:1;transform:none}
+.sync-construction.is-scrubbing .sequence-bottom{position:absolute;bottom:30px;left:var(--gutter);right:calc(var(--gutter) + 65px);margin:0}
+.sync-construction.is-scrubbing .tech-feature-photo{flex-shrink:0;height:clamp(85px,16vh,180px)}
+.sync-construction.is-scrubbing .tech-feature h3{max-width:530px}
+.sync-construction.is-scrubbing .tech-feature>p{max-width:530px}
+@media(min-width:901px) and (max-height:800px){.sync-construction.is-scrubbing .sequence-heading{top:80px}.sync-construction.is-scrubbing .tech-story-window{top:190px;bottom:65px}.sync-construction.is-scrubbing .tech-feature-photo{height:80px}}
+@media(max-width:900px){
+ .sync-construction .sequence-heading{display:block}.sync-construction .sequence-heading>p{display:none}.sync-construction .tech-story-track{grid-template-columns:1fr 1fr}
+ .sync-construction.is-scrubbing .sequence-heading{top:82px}.sync-construction.is-scrubbing .sequence-heading .tag{font-size:10px}.sync-construction.is-scrubbing .sequence-heading h2{font-size:27px;margin-top:13px;line-height:1.06}
+ .sync-construction.is-scrubbing .tech-story-window{top:195px;bottom:53px;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(145px,.8fr) minmax(275px,1fr);gap:14px}
+ .sync-construction.is-scrubbing .tech-model .construction-video{width:100%;left:0;height:100%}
+ .sync-construction.is-scrubbing .model-source{font-size:8px}
+ .sync-construction.is-scrubbing .tech-feature-photo{display:none}
+ .sync-construction.is-scrubbing .tech-feature-meta{font-size:11px;margin:0 0 9px}
+ .sync-construction.is-scrubbing .tech-feature h3{font-size:24px;margin-bottom:10px}
+ .sync-construction.is-scrubbing .tech-feature>p{font-size:13px;line-height:1.5}
+ .sync-construction.is-scrubbing .tech-feature-foot{display:block;margin-top:auto;padding-top:10px}
+ .sync-construction.is-scrubbing .tech-feature-foot>span{padding-top:8px}.sync-construction.is-scrubbing .tech-feature-foot>p{font-size:11px}
+ .sync-construction.is-scrubbing .sequence-bottom{bottom:22px;font-size:9px}.sync-construction .tech-story-count{min-width:100px;font-size:9px}
+}
+@media(max-width:900px) and (max-height:740px){
+ .sync-construction.is-scrubbing .sequence-heading{top:72px}.sync-construction.is-scrubbing .sequence-heading h2{font-size:23px;margin-top:10px}
+ .sync-construction.is-scrubbing .tech-story-window{top:170px;bottom:48px;grid-template-rows:145px minmax(0,1fr);gap:12px}
+ .sync-construction.is-scrubbing .tech-feature h3{font-size:21px;margin-bottom:8px}.sync-construction.is-scrubbing .tech-feature>p{font-size:12px;line-height:1.45}
+ .sync-construction.is-scrubbing .tech-feature-foot{display:none}.sync-construction.is-scrubbing .tech-feature-meta{margin-bottom:6px}
+}
+@media(max-width:600px){.sync-construction .tech-story-track{grid-template-columns:1fr}.sync-construction .tech-model{height:270px}.sync-construction .tech-feature-photo{height:200px}}
+@media(prefers-reduced-motion:reduce){.sync-construction .tech-feature{transition:none}.sync-construction .tech-feature-photo img{transform:none;transition:none}}
+.sync-construction:not(.is-scrubbing) .tech-feature-foot{display:block}

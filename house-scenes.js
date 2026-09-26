@@ -20,7 +20,7 @@
  video.addEventListener('error',()=>{construction.querySelector('.sequence-status').textContent='Видео недоступно';});
  function render(now){
   raf=0;const dt=Math.min(64,now-last||16);last=now;
-  const raw=progress(construction),a=clamp(raw/(innerHeight>600&&!reduce.matches?.38:1)),b=progress(orbit);
+  const raw=progress(construction),a=raw,b=progress(orbit);
   construction.style.setProperty('--sequence-progress',a);orbit.style.setProperty('--sequence-progress',b);
   const r=construction.getBoundingClientRect();
   if(!started&&r.top<innerHeight*2){started=true;fetch('assets/assembly/construction.mp4').then(r=>{if(!r.ok)throw new Error('video');return r.blob();}).then(blob=>{video.src=URL.createObjectURL(blob);video.load();}).catch(()=>{construction.querySelector('.sequence-status').textContent='Видео недоступно';});}
@@ -30,7 +30,7 @@
     const model=construction.querySelector('.tech-model').getBoundingClientRect();
     if(model.top<innerHeight&&model.bottom>0){video.loop=true;if(video.paused)video.play().catch(()=>{});}else video.pause();
    }else{video.pause();video.loop=false;wantedTime=(reduce.matches?1:a)*Math.max(0,video.duration-.06);seek();}
-   construction.querySelector('.sequence-status').textContent=`${Math.round(a*100)}%`;
+   construction.querySelector('.sequence-status').textContent=`${reduce.matches?100:Math.round(a*100)}%`;
   }
   current=reduce.matches?0:current+(b-current)*(1-Math.exp(-dt/150));
   wantedFrame=1+Math.round(current*74);

@@ -1,17 +1,24 @@
 'use strict';
 (()=>{
- const section=document.querySelector('.tech-story'),track=section?.querySelector('.tech-story-track');if(!track)return;
+ const section=document.querySelector('.tech-story'),track=section?.querySelector('.tech-story-track'),viewport=section?.querySelector('.tech-feature-viewport');if(!track||!viewport)return;
+ const cards=[...track.querySelectorAll('.tech-feature')];
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');let frame=0,current=0,distance=0,last=0;
  const clamp=v=>Math.max(0,Math.min(1,v));
- function resize(){distance=Math.max(0,track.scrollWidth-innerWidth+innerWidth*.034);section.style.setProperty('--tech-distance',`${Math.max(3200,distance*1.4+1400)}px`);schedule();}
- function draw(now){frame=0;const dt=Math.min(64,now-last||16);last=now;
+ function resize(){
   const active=innerHeight>600&&!reduced.matches;
+  section.classList.toggle('is-scrubbing',active);
+  distance=Math.max(0,track.scrollWidth-viewport.clientWidth);
+  section.style.setProperty('--tech-distance',`${Math.max(3000,(cards.length-1)*innerHeight*.7)}px`);schedule();
+ }
+ function draw(now){frame=0;const dt=Math.min(64,now-last||16);last=now;
+  const active=section.classList.contains('is-scrubbing');
   const p=active?clamp(-section.getBoundingClientRect().top/Math.max(1,section.offsetHeight-innerHeight)):0;
-  const target=clamp((p-.38)/.59);current=active?current+(target-current)*(1-Math.exp(-dt/100)):0;
-  track.style.transform=active?`translate3d(${-distance*current}px,0,0)`:'';track.style.setProperty('--mobile-tech-transform',active?`translate3d(${-distance*current}px,0,0)`:'none');
-  section.querySelector('.tech-story-count').textContent=current<.02?'КОНСТРУКЦИЯ → ДЕТАЛИ':`${Math.min(6,Math.max(1,Math.ceil(current*6)))} / 6 ПРЕИМУЩЕСТВ`;
-  section.querySelectorAll('.tech-feature').forEach(card=>{const r=card.getBoundingClientRect();card.classList.toggle('tech-feature-active',!active||r.left<innerWidth*.95&&r.right>0);});
-  if(Math.abs(target-current)>.0006&&active)frame=requestAnimationFrame(draw);
+  current=active?current+(p-current)*(1-Math.exp(-dt/85)):0;
+  track.style.setProperty('--tech-offset',`${-distance*current}px`);
+  section.querySelector('.tech-story-count').textContent=`${Math.min(cards.length,Math.round(current*(cards.length-1))+1)} / ${cards.length} ПРЕИМУЩЕСТВ`;
+  const bounds=viewport.getBoundingClientRect();
+  cards.forEach(card=>{const r=card.getBoundingClientRect();card.classList.toggle('tech-feature-active',!active||r.left<bounds.right-10&&r.right>bounds.left+10);});
+  if(Math.abs(p-current)>.0006&&active)frame=requestAnimationFrame(draw);
  }
  function schedule(){if(!frame)frame=requestAnimationFrame(draw);}
  addEventListener('scroll',schedule,{passive:true});addEventListener('resize',resize);addEventListener('load',resize);reduced.addEventListener('change',resize);resize();
