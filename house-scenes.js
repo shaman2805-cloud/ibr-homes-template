@@ -8,7 +8,7 @@
  const progress=el=>reduce.matches?0:clamp(-el.getBoundingClientRect().top/Math.max(1,el.offsetHeight-innerHeight));
  let raf=0,current=0,last=0,started=false,wantedTime=0,wantedFrame=1,shownFrame=1;
  const cache=new Map();
- function frameUrl(n){return `assets/assembly/${String(n).padStart(2,'0')}.jpg`;}
+ function frameUrl(n){return `assets/assembly/${String(n).padStart(2,'0')}.webp`;}
  function getFrame(n){
   if(n<1||n>75||cache.has(n))return;
   const image=new Image();cache.set(n,image);image.onload=()=>{if(n===wantedFrame){picture.src=image.src;shownFrame=n;}};image.src=frameUrl(n);
