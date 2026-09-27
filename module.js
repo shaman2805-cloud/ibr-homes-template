@@ -6,7 +6,6 @@
  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
  const models = window.IBR_MODELS;
 
- const articles = window.IBR_ARTICLES;
  const config = window.IBR_CALCULATOR || {whatsapp:'77007249123'};
  document.documentElement.classList.add('js');
  $$('.stagger-group').forEach(group=>[...group.children].forEach((el,i)=>el.style.setProperty('--item-delay',`${Math.min(i%3,2)*100}ms`)));
@@ -103,26 +102,7 @@
  function lightbox(src,alt,caption){$('#lightbox-image').src=src;$('#lightbox-image').alt=alt;$('#lightbox-caption').textContent=caption;openDialog($('#lightbox'));}
  $('#detail-zoom').addEventListener('click',()=>lightbox(models[selected].image,models[selected].name,'Концептуальная визуализация. Не фотография построенного объекта.'));
  $$('[data-stock]').forEach(b=>b.addEventListener('click',()=>{const img=b.querySelector('img');lightbox(img.dataset.full||img.currentSrc||img.src,img.alt,img.alt+' · IBR HOMES');}));
- const accordionAnimations=new WeakMap();
- $$('.faq-list details').forEach(details=>{
-  details.querySelector('summary').addEventListener('click',event=>{
-   if(reduced.matches)return;
-   event.preventDefault();
-   const opening=details.dataset.expanded!=='true';
-   const from=details.getBoundingClientRect().height;
-   accordionAnimations.get(details)?.cancel();
-   details.dataset.expanded=String(opening);
-   if(opening)details.open=true;
-   const target=opening?details.getBoundingClientRect().height:details.querySelector('summary').getBoundingClientRect().height+1;
-   const animation=details.animate([{height:`${from}px`},{height:`${target}px`}],{duration:360,easing:'cubic-bezier(.22,1,.36,1)'});
-   accordionAnimations.set(details,animation);
-   animation.onfinish=()=>{details.open=opening;accordionAnimations.delete(details);};
-  });
- });
- // Real, local articles rather than empty links.
- $('#journal-cards').innerHTML=articles.map((a,i)=>`<button class="journal-card" data-article="${i}"><img src="${esc(a.image)}" alt="Иллюстрация: ${esc(a.title)}" loading="lazy"><span>${esc(a.label)}</span><h3>${esc(a.title)}</h3><p>Читать материал ↗</p></button>`).join('');
  function article(title,label,paragraphs){$('#article-title').textContent=title;$('#article-label').textContent=label;$('#article-body').replaceChildren();paragraphs.forEach(p=>{const el=document.createElement('p');el.textContent=p;$('#article-body').append(el);});openDialog($('#article-dialog'));$('#article-dialog').scrollTop=0;}
- $$('[data-article]').forEach(b=>b.addEventListener('click',()=>{const a=articles[Number(b.dataset.article)];article(a.title,a.label,a.paragraphs);}));
  $('#privacy-open').addEventListener('click',()=>article('Как работает заявка','Данные в форме',[
   'Вы вводите имя, фамилию, номер телефона и параметры дома. Эта версия сайта использует их только для подготовки сообщения в WhatsApp. Поля остаются в памяти открытой страницы и очищаются после её перезагрузки.',
   'Сайт не сохраняет заявку в собственной базе данных. Открытие ссылки WhatsApp передаёт подготовленный текст в сервис WhatsApp; компания получает сообщение только после того, как вы нажмёте «Отправить» в WhatsApp.',

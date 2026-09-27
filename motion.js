@@ -11,7 +11,7 @@
   const counter=document.createElement('span');counter.className='circle-counter';counter.textContent=`0${i+1}`;counter.setAttribute('aria-hidden','true');stage.prepend(ring,counter);
  });
  const caption=document.createElement('div');caption.className='circle-scroll-caption';caption.setAttribute('aria-hidden','true');caption.innerHTML='<span>ОТ ИДЕИ — К ВАШЕМУ ДОМУ</span><i></i><span class="circle-step-label">01 / 03</span>';scene.append(caption);
- const selectors=['.module-heading>.tag','.module-heading>p','.estimate-section>div>p','.estimate-buttons','.advisor-card','.catalog-tabs','.catalog-card','.site-placement .tag','.site-placement ul','.site-placement .big-button','.module-faq>div:first-child','.faq-list details','.question-strip','.journal-card','.social-strip','.inspiration>.caption','footer>.tag','footer>h2','.footer-links','.footer-nav','.footer-bottom'];
+ const selectors=['.module-heading>.tag','.module-heading>p','.estimate-section>div>p','.estimate-buttons','.advisor-card','.catalog-tabs','.catalog-card','.site-placement .tag','.site-placement ul','.site-placement .big-button','.module-faq>div:first-child','.faq-link','.question-strip','.journal-card','.social-strip','.inspiration>.caption','footer>.tag','footer>h2','.footer-links','.footer-nav','.footer-bottom'];
  const revealEls=[];
  selectors.forEach(selector=>$$(selector).forEach((el,i)=>{if(el.classList.contains('reveal'))return;el.dataset.motion='rise';el.style.setProperty('--motion-delay',`${Math.min(i%3,2)*85}ms`);revealEls.push(el);}));
  $$('.inspiration-image').forEach(el=>{el.dataset.motion='image';revealEls.push(el);});
