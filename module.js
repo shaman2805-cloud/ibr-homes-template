@@ -1,5 +1,6 @@
 'use strict';
 (() => {
+ const t = value => window.IBRI18N?.t(value) ?? value;
  const $ = s => document.querySelector(s);
  const $$ = s => [...document.querySelectorAll(s)];
  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -168,8 +169,9 @@
  function validate(){
   for(const el of $('#quiz-fields').querySelectorAll('input')){
    el.setCustomValidity('');
-   if(el.required&&!['radio','checkbox'].includes(el.type)&&!el.value.trim())el.setCustomValidity('Заполните это поле.');
-   if(el.name==='phone'&&(!/^\+?[\d\s()\-]+$/.test(el.value.trim())||el.value.replace(/\D/g,'').length<10||el.value.replace(/\D/g,'').length>15))el.setCustomValidity('Укажите корректный номер телефона с кодом страны.');
+   if(el.required&&['radio','checkbox'].includes(el.type)&&!el.validity.valid)el.setCustomValidity(t(el.type==='checkbox'?'Для продолжения подтвердите согласие.':'Выберите один из вариантов.'));
+   if(el.required&&!['radio','checkbox'].includes(el.type)&&!el.value.trim())el.setCustomValidity(t('Заполните это поле.'));
+   if(el.name==='phone'&&(!/^\+?[\d\s()\-]+$/.test(el.value.trim())||el.value.replace(/\D/g,'').length<10||el.value.replace(/\D/g,'').length>15))el.setCustomValidity(t('Укажите корректный номер телефона с кодом страны.'));
    if(!el.checkValidity()){el.reportValidity();$('#quiz-error').textContent=el.type==='checkbox'?'Для продолжения подтвердите согласие.':el.type==='radio'?'Выберите один из вариантов.':'Проверьте выделенное поле.';return false;}
   }return true;
  }
@@ -185,13 +187,14 @@
  const labels={project:'Проект',model:'Формат из каталога',plot:'Есть земельный участок',city:'Город строительства',timing:'Начало строительства',area:'Интересующая площадь',firstName:'Имя',lastName:'Фамилия',phone:'Телефон'};
  function summary(){
   form.hidden=true;$('#quiz-result').hidden=false;$('#quiz-summary').replaceChildren();
-  const lines=['Здравствуйте! Хочу рассчитать стоимость проекта IBR HOMES.'];
-  Object.keys(labels).forEach(key=>{const value=answers[key];if(!value)return;const row=document.createElement('div'),dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=labels[key];dd.textContent=value;row.append(dt,dd);$('#quiz-summary').append(row);lines.push(`${labels[key]}: ${value}`);});
+  const lines=[t('Здравствуйте! Хочу рассчитать стоимость проекта IBR HOMES.')];
+  Object.keys(labels).forEach(key=>{const value=answers[key];if(!value)return;const row=document.createElement('div'),dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=labels[key];dd.textContent=value;if(['firstName','lastName','city','phone'].includes(key))dd.dataset.noTranslate='';row.append(dt,dd);$('#quiz-summary').append(row);lines.push(`${t(labels[key])}: ${['firstName','lastName','city','phone'].includes(key)?value:t(value)}`);});
   $('#quiz-price').textContent='Подготовим предварительный расчёт после уточнения планировки и комплектации.';
-  lines.push('Согласен передать эти данные IBR HOMES для обсуждения заявки.');
+  lines.push(t('Согласен передать эти данные IBR HOMES для обсуждения заявки.'));
   $('#quiz-send').href=`https://wa.me/${String(config.whatsapp||'77007249123').replace(/\D/g,'')}?text=${encodeURIComponent(lines.join('\n'))}`;
   $('#quiz-status').textContent='';$('#quiz-result h2').focus({preventScroll:true});$('#quiz').scrollTop=0;
  }
+ addEventListener('ibr:language',()=>{if($('#quiz').open&&!$('#quiz-result').hidden)summary();form.querySelectorAll('input').forEach(el=>el.setCustomValidity(''));});
  form.addEventListener('change',e=>{if(e.target.name==='project'&&answers.model){const m=models.find(m=>m.name===answers.model);if(m?.project!==e.target.value)delete answers.model;}});
  form.addEventListener('submit',e=>{e.preventDefault();if(!validate())return;capture();if(step<pages.length-1){step++;render();}else summary();});
  $('#quiz-edit').addEventListener('click',()=>{step=0;render();});

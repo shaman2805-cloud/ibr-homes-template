@@ -12,10 +12,12 @@
  }
  function draw(now){frame=0;const dt=Math.min(64,now-last||16);last=now;
   const active=section.classList.contains('is-scrubbing');
-  const p=active?clamp(-section.getBoundingClientRect().top/Math.max(1,section.offsetHeight-innerHeight)):0;
+  const raw=active?clamp(-section.getBoundingClientRect().top/Math.max(1,section.offsetHeight-innerHeight)):0;
+  const p=clamp((raw-.05)/.83);
   current=active?current+(p-current)*(1-Math.exp(-dt/85)):0;
   track.style.setProperty('--tech-offset',`${-distance*current}px`);
-  section.querySelector('.tech-story-count').textContent=`${Math.min(cards.length,Math.round(current*(cards.length-1))+1)} / ${cards.length} ПРЕИМУЩЕСТВ`;
+  const count=section.querySelector('.tech-story-count'),label=`${Math.min(cards.length,Math.round(current*(cards.length-1))+1)} / ${cards.length} ПРЕИМУЩЕСТВ`;
+  const translated=window.IBRI18N?.t(label)||label;if(count.textContent!==translated)count.textContent=translated;
   const bounds=viewport.getBoundingClientRect();
   cards.forEach(card=>{const r=card.getBoundingClientRect();card.classList.toggle('tech-feature-active',!active||r.left<bounds.right-10&&r.right>bounds.left+10);});
   if(Math.abs(p-current)>.0006&&active)frame=requestAnimationFrame(draw);

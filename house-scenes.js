@@ -33,7 +33,8 @@
   final.style.opacity=clamp((p-.94)/.06);
   section.style.setProperty('--sequence-progress',p);
   const label=p<.16?'Основание':p<.5?'Стены и остекление':p<.7?'Терраса':p<.94?'Кровля':'Дом собран';
-  const nextStatus=mobile()&&!reduced.matches?`${label} ↻`:label;
+  const translated=window.IBRI18N?.t(label)||label;
+  const nextStatus=mobile()&&!reduced.matches?`${translated} ↻`:translated;
   if(status.textContent!==nextStatus)status.textContent=nextStatus;
  }
  function draw(now){
