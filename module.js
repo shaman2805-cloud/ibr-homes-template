@@ -71,7 +71,7 @@
  bubble.addEventListener('click',()=>contactToggle(contact.hidden));$('.contact-close').addEventListener('click',()=>{contactToggle(false);bubble.focus();});
  addEventListener('keydown',e=>{if(e.key==='Escape'&&!contact.hidden){contactToggle(false);bubble.focus();}});
  // Keyboard-accessible catalogue.
- let selected=0;
+ let selected=0, selectedExterior=0, selectedPlan=0;
  $('.catalog-tabs').innerHTML=models.map((m,i)=>`<button role="tab" id="model-tab-${m.id}" aria-controls="catalog-panel" aria-selected="${i===0}" tabindex="${i===0?0:-1}">${esc(m.name)}</button>`).join('');
  function selectModel(index, focus=false){
   selected=index;const m=models[index];
@@ -80,6 +80,8 @@
   $('#catalog-photo').srcset=`${m.image.replace('.webp','-small.webp')} 800w, ${m.image} ${m.width}w`;$('#catalog-photo').src=m.image;$('#catalog-photo').alt=`Пример архитектуры для «${m.name}»`;
   if(!reduced.matches)$('#catalog-photo').animate([{opacity:.45,transform:'scale(1.025)'},{opacity:1,transform:'scale(1)'}],{duration:650,easing:'cubic-bezier(.22,1,.36,1)'});
   $('#catalog-name').textContent=m.name;$('#catalog-tag').textContent=m.tag;
+  $('#catalog-specs').innerHTML=specs(m);
+  $('#catalog-photo').alt=`${m.name} — ${m.styles[0].name}`;
   if(focus)$$('.catalog-tabs button')[index].focus();
  }
  $$('.catalog-tabs button').forEach((b,i)=>{
@@ -91,16 +93,49 @@
   $('#detail-exterior').hidden=view!=='exterior';$('#detail-plan').hidden=view!=='plan';
  }
  $$('.detail-tabs button').forEach(b=>{b.addEventListener('click',()=>setDetailView(b.dataset.view));b.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();setDetailView(e.key==='Home'?'exterior':e.key==='End'?'plan':b.dataset.view==='plan'?'exterior':'plan',true);}});});
+ function specs(m){
+  return [['Размеры по плану',m.size],['Помещения',m.roomCount],['Планировки',`${m.plans.length} на выбор`]].map(([label,value])=>`<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join('');
+ }
+ function selectExterior(index){
+  selectedExterior=index;const m=models[selected],style=m.styles[index];
+  $('#detail-photo').src=style.image;$('#detail-photo').alt=`${m.name} — ${style.name}`;
+  $('#detail-facade-name').textContent=style.name;$('#detail-facade-count').textContent=`${index+1} / ${m.styles.length}`;
+  $$('#style-gallery button').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===index)));
+ }
+ function selectPlan(index){
+  selectedPlan=index;const m=models[selected],plan=m.plans[index];
+  $('#detail-plan-image').src=plan.image;$('#detail-plan-image').alt=`${m.name}: ${plan.name}, вид сверху`;
+  $('#detail-plan-name').textContent=plan.name;$('#detail-plan-copy').textContent=plan.text;
+  $('#plan-download').href=m.planPdf||plan.image;$('#plan-download').textContent=m.planPdf?'Открыть оригинал PDF ↗':'Открыть план в полном размере ↗';
+  $$('#plan-options button').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===index)));
+ }
  function styleGallery(m){
   const gallery=$('#style-gallery');gallery.replaceChildren();
-  m.styles.forEach(style=>{const button=document.createElement('button');button.type='button';button.className='style-option';const image=document.createElement('img');image.src=style.image.replace('.webp','-small.webp');image.alt=style.name;image.loading='lazy';const label=document.createElement('span');label.textContent=style.name+' ↗';button.append(image,label);button.addEventListener('click',()=>lightbox(style.image,style.name,'Фотография · '+style.name));gallery.append(button);});
+  m.styles.forEach((style,i)=>{const button=document.createElement('button');button.type='button';button.className='style-option';button.setAttribute('aria-pressed',String(i===0));const image=document.createElement('img');image.src=style.image.replace('.webp','-small.webp');image.alt='';image.loading='lazy';const label=document.createElement('span');label.textContent=style.name;button.append(image,label);button.addEventListener('click',()=>selectExterior(i));gallery.append(button);});
+  const plans=$('#plan-options');plans.replaceChildren();
+  m.plans.forEach((plan,i)=>{const button=document.createElement('button');button.type='button';button.textContent=`${String(i+1).padStart(2,'0')} / ${plan.name}`;button.setAttribute('aria-pressed',String(i===0));button.addEventListener('click',()=>selectPlan(i));plans.append(button);});
+  selectExterior(0);selectPlan(0);
  }
- $('#model-details').addEventListener('click',()=>{
-  const m=models[selected];$('#detail-title').textContent=m.name;$('#detail-copy').textContent=m.text;$('#detail-photo').src=m.image;$('#detail-photo').alt=`Пример архитектуры для «${m.name}»`;
-  $('#detail-rooms').innerHTML=m.rooms.map(r=>`<li>${esc(r)}</li>`).join('');styleGallery(m);setDetailView('exterior');openDialog($('#model-dialog'));$('#model-dialog').scrollTop=0;
+ function showModel(view){
+  const m=models[selected];$('#detail-title').textContent=m.name;$('#detail-copy').textContent=m.text;
+  $('#detail-specs').innerHTML=specs(m);$('#detail-rooms').innerHTML=m.rooms.map(r=>`<li>${esc(r)}</li>`).join('');
+  styleGallery(m);setDetailView(view);openDialog($('#model-dialog'));$('#model-dialog').scrollTop=0;
+ }
+ $('#model-details').addEventListener('click',()=>showModel('exterior'));
+ $('#model-plan').addEventListener('click',()=>showModel('plan'));
+ function lightbox(src,alt,caption,isPlan=false){
+  const box=$('#lightbox');box.classList.remove('is-zoomed');box.classList.toggle('is-plan',isPlan);
+  $('#lightbox-scale').setAttribute('aria-pressed','false');$('#lightbox-scale').textContent='Увеличить +';
+  $('#lightbox-image').src=src;$('#lightbox-image').alt=alt;$('#lightbox-caption').textContent=caption;openDialog(box);
+  const canvas=box.querySelector('.lightbox-canvas');canvas.scrollTop=0;canvas.scrollLeft=0;
+ }
+ $('#lightbox-scale').addEventListener('click',()=>{
+  const zoomed=$('#lightbox').classList.toggle('is-zoomed');$('#lightbox-scale').setAttribute('aria-pressed',String(zoomed));$('#lightbox-scale').textContent=zoomed?'Вписать в экран −':'Увеличить +';
+  const canvas=$('#lightbox .lightbox-canvas');
+  requestAnimationFrame(()=>canvas.scrollTo({left:zoomed?(canvas.scrollWidth-canvas.clientWidth)/2:0,top:zoomed?(canvas.scrollHeight-canvas.clientHeight)/2:0,behavior:'instant'}));
  });
- function lightbox(src,alt,caption){$('#lightbox-image').src=src;$('#lightbox-image').alt=alt;$('#lightbox-caption').textContent=caption;openDialog($('#lightbox'));}
- $('#detail-zoom').addEventListener('click',()=>lightbox(models[selected].image,models[selected].name,'Фото для выбора архитектуры. Планировку и комплектацию согласуем отдельно.'));
+ $('#detail-zoom').addEventListener('click',()=>{const m=models[selected],style=m.styles[selectedExterior];lightbox(style.image,`${m.name} — ${style.name}`,'Визуализация проекта · '+m.name+' · '+style.name);});
+ $('#plan-zoom').addEventListener('click',()=>{const m=models[selected],plan=m.plans[selectedPlan];lightbox(plan.image,`${m.name}: ${plan.name}, вид сверху`,m.name+' · '+plan.name+' · Используйте увеличение, чтобы рассмотреть размеры.',true);});
  $$('[data-stock]').forEach(b=>b.addEventListener('click',()=>{const img=b.querySelector('img');lightbox(img.dataset.full||img.currentSrc||img.src,img.alt,img.alt+' · IBR HOMES');}));
  function article(title,label,paragraphs){$('#article-title').textContent=title;$('#article-label').textContent=label;$('#article-body').replaceChildren();paragraphs.forEach(p=>{const el=document.createElement('p');el.textContent=p;$('#article-body').append(el);});openDialog($('#article-dialog'));$('#article-dialog').scrollTop=0;}
  $('#privacy-open').addEventListener('click',()=>article('Как работает заявка','Данные в форме',[

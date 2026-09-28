@@ -12,7 +12,7 @@
 .is-horizontal .module-heading{margin:0;grid-template-columns:1fr 2fr 1fr}
 .is-horizontal .module-heading h2{font-size:clamp(36px,3.8vw,62px);line-height:1.03}
 .is-horizontal .steps-window{position:absolute;top:275px;bottom:100px;left:var(--gutter);right:var(--gutter);overflow:hidden}
-.is-horizontal .timeline{display:flex;flex-direction:row-reverse;width:max-content;height:100%;gap:60px;margin:0;will-change:transform}
+.is-horizontal .timeline{display:flex;flex-direction:row;width:max-content;height:100%;gap:60px;margin:0;will-change:transform}
 .is-horizontal .timeline article{flex:0 0 var(--step-width);width:var(--step-width);height:100%;display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);grid-template-rows:auto auto 1fr;column-gap:6vw;padding:28px 0 0;border:0;border-top:1px solid #ccc;opacity:1!important;transform:none!important}
 .is-horizontal .timeline article:before,.is-horizontal .timeline i{display:none}
 .is-horizontal .timeline article>span{grid-column:1;grid-row:1;font-size:14px;color:#8c7a60;align-self:start;opacity:1;transform:none}

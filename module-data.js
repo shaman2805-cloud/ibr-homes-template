@@ -3,186 +3,207 @@ window.IBR_MODELS = [
   {
     "id": "house-s",
     "name": "Дом S",
-    "image": "assets/photos/house-03.webp",
-    "width": 1600,
-    "tag": "Компактный формат. Всё необходимое.",
-    "text": "Дом для загородных выходных или постоянного проживания. Вместе определим состав помещений, продуманное хранение и связь с террасой.",
+    "tag": "Небольшой дом. Большое пространство для жизни.",
+    "text": "Два варианта планировки с одной или двумя спальнями, кухней-гостиной и выходом на террасу. Выберите близкое вам архитектурное решение и расположение комнат.",
+    "size": "7,5 × 6,7 м",
+    "roomCount": "1–2 спальни",
     "rooms": [
-      "Кухня-гостиная",
-      "Приватная зона",
+      "Кухня-гостиная — 23 м²",
+      "Одна спальня 13 м² или две по 9 м²",
       "Санузел",
-      "Терраса по желанию"
+      "Терраса — 17 м²"
     ],
     "project": "Дом",
+    "width": 1920,
     "styles": [
       {
-        "name": "Деревянный фасад",
-        "image": "assets/photos/house-04.webp",
-    "width": 1600
+        "name": "Барнхаус",
+        "image": "assets/catalog/house-s/exterior-1.webp",
+        "width": 1920
       },
       {
-        "name": "Панорамные окна",
-        "image": "assets/photos/house-02.webp",
-    "width": 1038
+        "name": "Барн",
+        "image": "assets/catalog/house-s/exterior-2.webp",
+        "width": 1920
       },
       {
-        "name": "Дом с террасой",
-        "image": "assets/photos/house-08.webp",
-    "width": 1100
+        "name": "Итальянский фахверк",
+        "image": "assets/catalog/house-s/exterior-3.webp",
+        "width": 1920
       },
       {
-        "name": "Тёмный фасад",
-        "image": "assets/photos/house-06.webp",
-    "width": 1280
+        "name": "Немецкий фахверк",
+        "image": "assets/catalog/house-s/exterior-4.webp",
+        "width": 1920
       }
-    ]
+    ],
+    "plans": [
+      {
+        "name": "Одна спальня",
+        "image": "assets/catalog/house-s/plan-1.webp",
+        "text": "Спальня 13 м², кухня-гостиная 23 м², санузел 5 м² и холл 4 м²."
+      },
+      {
+        "name": "Две спальни",
+        "image": "assets/catalog/house-s/plan-2.webp",
+        "text": "Две спальни по 9 м², кухня-гостиная 23 м² и санузел 3 м²."
+      }
+    ],
+    "image": "assets/catalog/house-s/exterior-1.webp"
   },
   {
     "id": "house-m",
     "name": "Дом M",
-    "image": "assets/photos/house-07.webp",
-    "width": 1280,
-    "tag": "Пространство для вашего ритма жизни.",
-    "text": "Сбалансированное решение для семьи. Планировку разрабатываем с учётом ваших привычек, участка и пожеланий к общим и отдельным комнатам.",
+    "tag": "Место для семьи и любимых привычек.",
+    "text": "Две спальни и общая зона с выходом на террасу. Варианты отличаются размером кухни-гостиной, санузлом и расположением входа.",
+    "size": "10 × 6,7 м",
+    "roomCount": "2 спальни",
     "rooms": [
-      "Общая зона",
-      "Спальни",
-      "Места хранения",
-      "Выход на участок"
+      "Две спальни по 10 м²",
+      "Кухня-гостиная — 23 или 31 м²",
+      "Холл — 6 м²",
+      "Терраса — 17 м²"
     ],
     "project": "Дом",
+    "width": 1920,
     "styles": [
       {
-        "name": "Деревянный фасад",
-        "image": "assets/photos/house-04.webp",
-    "width": 1600
+        "name": "Хай-тек",
+        "image": "assets/catalog/house-m/exterior-1.webp",
+        "width": 1920
       },
       {
-        "name": "Панорамные окна",
-        "image": "assets/photos/house-02.webp",
-    "width": 1038
+        "name": "Барн",
+        "image": "assets/catalog/house-m/exterior-2.webp",
+        "width": 1920
       },
       {
-        "name": "Дом с террасой",
-        "image": "assets/photos/house-08.webp",
-    "width": 1100
+        "name": "Итальянский фахверк",
+        "image": "assets/catalog/house-m/exterior-3.webp",
+        "width": 1920
       },
       {
-        "name": "Тёмный фасад",
-        "image": "assets/photos/house-06.webp",
-    "width": 1280
+        "name": "Немецкий фахверк",
+        "image": "assets/catalog/house-m/exterior-4.webp",
+        "width": 1920
       }
-    ]
+    ],
+    "plans": [
+      {
+        "name": "Кухня-гостиная 23 м²",
+        "image": "assets/catalog/house-m/plan-1.webp",
+        "text": "Две спальни по 10 м², санузел 6 м² и вход с боковой стороны."
+      },
+      {
+        "name": "Кухня-гостиная 31 м²",
+        "image": "assets/catalog/house-m/plan-2.webp",
+        "text": "Две спальни по 10 м², санузел 3 м² и отдельное крыльцо 4 м²."
+      }
+    ],
+    "image": "assets/catalog/house-m/exterior-1.webp"
   },
   {
     "id": "house-l",
     "name": "Дом L",
-    "image": "assets/photos/house-08.webp",
-    "width": 1100,
-    "tag": "Больше возможностей для всей семьи.",
-    "text": "Просторный дом с индивидуальным набором помещений. Предусмотрим место для семейных встреч, работы, гостей и спокойного отдыха.",
+    "tag": "Больше личного пространства для каждого.",
+    "text": "Четыре планировки с двумя или тремя спальнями. Можно выбрать дополнительный санузел, гардеробную или просторную общую зону. Все варианты включают террасу.",
+    "size": "15 × 6,7 м",
+    "roomCount": "2–3 спальни",
     "rooms": [
-      "Семейная гостиная",
-      "Приватные комнаты",
-      "Кабинет по желанию",
-      "Просторная терраса"
+      "Две или три спальни",
+      "Один или два санузла",
+      "Гардеробная в одном из вариантов",
+      "Терраса — 20,2 м²"
     ],
     "project": "Дом",
+    "width": 1920,
     "styles": [
       {
-        "name": "Деревянный фасад",
-        "image": "assets/photos/house-04.webp",
-    "width": 1600
+        "name": "Барнхаус",
+        "image": "assets/catalog/house-l/exterior-1.webp",
+        "width": 1920
       },
       {
-        "name": "Панорамные окна",
-        "image": "assets/photos/house-02.webp",
-    "width": 1038
+        "name": "Барн",
+        "image": "assets/catalog/house-l/exterior-2.webp",
+        "width": 1920
       },
       {
-        "name": "Дом с террасой",
-        "image": "assets/photos/house-08.webp",
-    "width": 1100
+        "name": "Итальянский фахверк",
+        "image": "assets/catalog/house-l/exterior-3.webp",
+        "width": 1920
       },
       {
-        "name": "Тёмный фасад",
-        "image": "assets/photos/house-06.webp",
-    "width": 1280
+        "name": "Немецкий фахверк",
+        "image": "assets/catalog/house-l/exterior-4.webp",
+        "width": 1920
       }
-    ]
+    ],
+    "plans": [
+      {
+        "name": "Три спальни · два санузла",
+        "image": "assets/catalog/house-l/plan-1.webp",
+        "text": "Спальни 11,8 / 11,2 / 11,1 м²; санузлы 6 и 3,6 м²."
+      },
+      {
+        "name": "Три спальни",
+        "image": "assets/catalog/house-l/plan-2.webp",
+        "text": "Спальни 11,8 / 13 / 13 м² и санузел 6 м²."
+      },
+      {
+        "name": "Две спальни · гардеробная",
+        "image": "assets/catalog/house-l/plan-3.webp",
+        "text": "Две спальни по 13 м², гардеробная 6 м² и два санузла."
+      },
+      {
+        "name": "Две спальни · большая гостиная",
+        "image": "assets/catalog/house-l/plan-4.webp",
+        "text": "Две спальни по 13 м², общая зона для отдыха и санузел 6 м²."
+      }
+    ],
+    "image": "assets/catalog/house-l/exterior-1.webp"
   },
   {
     "id": "bath-s",
     "name": "Баня S",
-    "image": "assets/photos/house-01.webp",
-    "width": 1578,
-    "tag": "Личное место для отдыха.",
-    "text": "Компактная баня на вашем участке. Обсудим парную, моечную, отдых и необходимые инженерные системы.",
+    "tag": "Ваш собственный ритуал отдыха.",
+    "text": "Баня с отдельной парной, душевой, санузлом и гостиной. Три решения для внешнего вида и подробный план помещений помогут представить её на вашем участке.",
+    "size": "8 × 2,8 м",
+    "roomCount": "Парная + гостиная",
     "rooms": [
-      "Парная",
-      "Моечная",
-      "Зона отдыха",
-      "Отделка по проекту"
+      "Парная — 5,46 м²",
+      "Гостиная — 7,49 м²",
+      "Душевая — 1,68 м²",
+      "Санузел — 1,32 м²",
+      "Прихожая — 3,68 м²"
     ],
     "project": "Баня",
+    "width": 1920,
     "styles": [
       {
-        "name": "Деревянный фасад",
-        "image": "assets/photos/house-04.webp",
-    "width": 1600
+        "name": "Барнхаус",
+        "image": "assets/catalog/bath-s/exterior-1.webp",
+        "width": 1920
       },
       {
-        "name": "Панорамные окна",
-        "image": "assets/photos/house-02.webp",
-    "width": 1038
+        "name": "Хай-тек",
+        "image": "assets/catalog/bath-s/exterior-2.webp",
+        "width": 1920
       },
       {
-        "name": "Дом с террасой",
-        "image": "assets/photos/house-08.webp",
-    "width": 1100
-      },
-      {
-        "name": "Тёмный фасад",
-        "image": "assets/photos/house-06.webp",
-    "width": 1280
+        "name": "Фахверк",
+        "image": "assets/catalog/bath-s/exterior-3.webp",
+        "width": 1920
       }
-    ]
-  },
-  {
-    "id": "bath-m",
-    "name": "Баня M",
-    "image": "assets/photos/house-05.webp",
-    "width": 1280,
-    "tag": "Отдых, которым хочется делиться.",
-    "text": "Баня для отдыха с семьёй и друзьями. Подберём планировку, комплектацию и архитектурный стиль под участок и ваши сценарии отдыха.",
-    "rooms": [
-      "Парная",
-      "Моечная",
-      "Комната отдыха",
-      "Терраса по желанию"
     ],
-    "project": "Баня",
-    "styles": [
+    "plans": [
       {
-        "name": "Деревянный фасад",
-        "image": "assets/photos/house-04.webp",
-    "width": 1600
-      },
-      {
-        "name": "Панорамные окна",
-        "image": "assets/photos/house-02.webp",
-    "width": 1038
-      },
-      {
-        "name": "Дом с террасой",
-        "image": "assets/photos/house-08.webp",
-    "width": 1100
-      },
-      {
-        "name": "Тёмный фасад",
-        "image": "assets/photos/house-06.webp",
-    "width": 1280
+        "name": "План бани",
+        "image": "assets/catalog/bath-s/plan-1.webp",
+        "text": "Парная, душевая, санузел, прихожая и гостиная. Размеры и площади указаны на плане."
       }
-    ]
+    ],
+    "image": "assets/catalog/bath-s/exterior-1.webp",
+    "planPdf": "assets/catalog/bath-s/plan.pdf"
   }
 ];
