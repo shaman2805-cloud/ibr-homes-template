@@ -85,3 +85,7 @@ html[lang=kk] .hero-bottom button{font-size:20px}
  .clt-stack-scene i{transition:none;transform:translateZ(calc(var(--layer) * 15px))}
  .style-option:hover img{transform:none}
 }
+
+/* CLT copy supplied by the client. */
+.clt-intro > .clt-expansion { font-size: clamp(18px, 1.7vw, 26px); line-height: 1.3; margin: -12px 0 32px; color: #c9ceca; }
+.clt-story .clt-conclusion { margin-top: 0; padding-top: 26px; }
