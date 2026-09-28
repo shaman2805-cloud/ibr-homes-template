@@ -88,7 +88,7 @@ async function initialize(){
   let target=0,current=0,frame=0,last=0;
   function render(now){frame=0;if(document.hidden||!visible){last=0;return;}const dt=Math.min(50,now-last||16);last=now;current=reduced.matches?target:current+(target-current)*(1-Math.exp(-dt/100));house.rotation.y=-current*Math.PI*2;renderer.render(scene,camera);section.dataset.modelAngle=String(Math.round(current*360));if(Math.abs(current-target)>.00008)frame=requestAnimationFrame(render);}
   function schedule(){if(!frame)frame=requestAnimationFrame(render);}
-  function resize(){const width=host.clientWidth,height=host.clientHeight;if(!width||!height)return;renderer.setSize(width,height,false);const aspect=width/height;const span=Math.max(6.8,10.7/aspect);camera.left=-span*aspect;camera.right=span*aspect;camera.top=span;camera.bottom=-span;camera.updateProjectionMatrix();schedule();}
+  function resize(){const width=host.clientWidth,height=host.clientHeight;if(!width||!height)return;renderer.setSize(width,height,false);const aspect=width/height;const span=Math.max(5.6,9.6/aspect);camera.left=-span*aspect;camera.right=span*aspect;camera.top=span;camera.bottom=-span;camera.updateProjectionMatrix();schedule();}
   controller={turn(p){target=clamp(p);slider.value=Math.round(target*360);output.value=`${Math.round(target*360)}°`;section.style.setProperty('--sequence-progress',target);schedule();},schedule};
   new ResizeObserver(resize).observe(host);resize();sync();schedule();section.classList.add('model-ready');section.dataset.modelState='ready';slider.disabled=false;
   canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();cancelAnimationFrame(frame);frame=0;section.classList.remove('model-ready');section.dataset.modelState='fallback';slider.disabled=true;});

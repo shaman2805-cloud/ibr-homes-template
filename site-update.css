@@ -92,3 +92,22 @@
  .hero-content .hero-partner { margin-top: 6px; font-size: 10px; gap: 3px 8px; }
  .hero-partner strong { font-size: 13px; }
 }
+
+/* Partner description, section-aware FAQ and visible social contact. */
+.hero-partner .hero-partner-description{flex-basis:100%;max-width:440px;color:#ffffffe0;font-size:12px;line-height:1.45}
+.faq-group-title{font-size:12px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:#777;margin:0 0 18px}
+.faq-answers{margin-top:45px}
+.faq-list summary:focus-visible{outline:2px solid #8e7e65;outline-offset:5px}
+.faq-list details[open] summary{color:var(--ink)}
+.faq-list details>p{line-height:1.65}
+.footer-instagram{display:flex;align-items:center;gap:12px;font-size:14px;line-height:1.4;padding:10px 0;transition:opacity .25s}
+.footer-instagram svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.5;flex:none}
+.footer-instagram strong{font-weight:400;margin-left:8px}
+.footer-instagram:hover{opacity:.6}
+.footer-instagram:focus-visible{outline:2px solid currentColor;outline-offset:5px}
+@media(max-width:700px){
+ .hero-partner .hero-partner-description{font-size:10px;line-height:1.4;max-width:290px}
+ .faq-answers{margin-top:35px}
+ .footer-instagram{font-size:15px}
+}
+@media(prefers-reduced-motion:reduce){.faq-list details>p{animation:none}}
