@@ -1,0 +1,158 @@
+/* Version 18: one catalogue for models, architecture and facade finishes. */
+.hero-frames{position:absolute;inset:0;z-index:-2;overflow:hidden}
+.hero-frame{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:0;will-change:opacity}
+.hero-frame:first-child{opacity:1;object-position:50% 58%}
+.motion-ready .hero-scroll{height:420svh}
+.motion-ready.onepage .hero-scroll .module-hero{padding-bottom:155px}
+.hero-gallery-controls{position:absolute;bottom:65px;left:var(--gutter);right:var(--gutter);display:flex;gap:12px;z-index:2}
+.hero-gallery-controls button{display:flex;align-items:center;gap:14px;background:#19221970;color:#fff;border:1px solid #ffffff55;padding:12px 18px;border-radius:3px;font-size:12px;backdrop-filter:blur(8px);transition:background .3s,border-color .3s}
+.hero-gallery-controls button>span:first-child{font-size:10px;opacity:.6}
+.hero-gallery-controls button[aria-pressed=true]{background:#f3f1e9;color:#292d28;border-color:#f3f1e9}
+.hero-gallery-controls button:focus-visible,.project-visual:focus-visible{outline:2px solid #b79a6a;outline-offset:5px}
+.hero-scroll-cue{bottom:28px}
+/* Text-only steps retain the requested leftward scroll. */
+#steps.is-horizontal .timeline article{display:flex;flex-direction:column;justify-content:center;gap:0;padding:35px 8vw;border:1px solid #d7d2c8;background:#f2efe8}
+#steps.is-horizontal .timeline article>span{font-size:14px;letter-spacing:.12em;color:#87745b}
+#steps.is-horizontal .timeline h3{font-size:clamp(50px,6.5vw,105px);margin:30px 0;max-width:none}
+#steps.is-horizontal .timeline ul{font-size:clamp(18px,1.65vw,25px);line-height:1.7;padding-left:24px;margin:0;max-width:800px}
+#steps.is-horizontal .steps-window{top:280px;bottom:95px}
+#catalog{position:relative;scroll-margin-top:65px}
+#catalog .module-heading h2{letter-spacing:-.065em;font-size:clamp(52px,7vw,104px)}
+#catalog-panel{align-items:start;grid-template-columns:minmax(0,1.85fr) minmax(320px,1fr);gap:0 30px;outline:none}
+.project-gallery{min-width:0}
+.project-visual{position:relative;isolation:isolate;overflow:hidden;background:#dedfd8;touch-action:pan-y}
+#catalog-photo,#detail-photo{position:static;display:block;width:100%;height:auto;min-height:0;max-height:none;aspect-ratio:16/9;object-fit:contain;transform:none}
+.project-visual canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0}
+.project-visual canvas.is-ready{opacity:1}
+.project-photo-caption{position:absolute;z-index:2;inset:0 0 auto;display:flex;align-items:center;justify-content:space-between;padding:20px;color:white;background:linear-gradient(#182019bb,transparent);font-size:clamp(16px,1.65vw,26px);line-height:1.25;pointer-events:none}
+.project-photo-caption>span:last-child{font-size:12px;letter-spacing:.07em;flex:none;padding-left:18px}
+.project-arrow,.project-enlarge{position:absolute;z-index:3;border:1px solid #ffffff50;background:#f8f5eae6;color:#2d332c;display:grid;place-items:center;width:42px;height:42px;border-radius:50%;font-size:22px!important;cursor:pointer;transition:background .2s,transform .2s}
+.project-arrow{top:50%;transform:translateY(-50%)}
+.project-arrow.previous{left:16px}.project-arrow.next{right:16px}
+.project-arrow:hover,.project-enlarge:hover{background:#fff}
+.project-enlarge{bottom:15px;right:16px}
+.project-style-options,#style-gallery{display:flex;gap:8px;margin:12px 0 0;overflow-x:auto;scrollbar-width:thin;padding:0 0 8px}
+.project-style-options button,#style-gallery .style-option{flex:1 0 120px;min-width:0;display:flex;flex-direction:column;text-align:left;padding:4px;border:1px solid transparent;border-radius:0;background:none;color:#59574f}
+.project-style-options button[aria-pressed=true],#style-gallery .style-option[aria-pressed=true]{border-color:#887453;color:#242720}
+.project-style-options img,#style-gallery img{width:100%;aspect-ratio:16/9;height:auto;object-fit:cover}
+.project-style-options span,#style-gallery span{position:static;display:block;padding:10px 4px 4px;font-size:11px;line-height:1.35;background:none;color:inherit}
+.catalog-card{padding:0 0 0 3px;background:transparent}
+.catalog-card h3{margin:12px 0 16px}
+.catalog-card>p{max-width:none;font-size:16px}
+.catalog-card dl{margin:20px 0 18px}
+.catalog-card dl div{padding:9px 0}
+.catalog-card dl dd{font-size:18px}
+.catalog-card .big-button{margin-top:20px;font-size:15px;padding:20px 23px}
+.project-color-label{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;margin:0 0 15px}
+[data-color-reset]{border:0;border-bottom:1px solid #bab5a9;background:none;padding:0 0 3px;color:#777;font-size:10px;cursor:pointer}
+.project-colors{display:flex;gap:12px;justify-content:space-between}
+.project-colors button{display:flex;flex-direction:column;align-items:center;gap:10px;padding:6px 4px 8px;flex:1;border:0;border-bottom:2px solid transparent;background:none;color:#68665f;font-size:10px;cursor:pointer}
+.project-colors button i{display:block;width:28px;height:28px;border-radius:50%;background:var(--swatch);box-shadow:inset 0 0 0 1px #0002}
+.project-colors button[aria-pressed=true]{color:#282c26;border-bottom-color:#87745b}
+.project-colors button[aria-pressed=true] i{outline:1px solid #87745b;outline-offset:4px}
+.color-preview-note{font-size:10px!important;line-height:1.5;color:#8b877d;margin:10px 0 0}
+.detail-colors{display:flex;align-items:center;gap:30px;padding:25px 0 0;font-size:13px}
+.detail-colors .project-colors{width:min(450px,70%)}
+#detail-exterior .color-preview-note{margin:12px 0 0}
+/* A real 3D volume, fully separated from the reading area. */
+.model-construction .house-model-view{position:absolute;inset:0;overflow:hidden}
+.model-construction .tech-model{position:relative;background:radial-gradient(ellipse at 50% 65%,#e3dfd5 0%,#f3f2f0 70%);height:520px}
+.model-construction .model-fallback{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity .3s}
+.model-construction.model-ready .model-fallback{opacity:0}
+#house-model-canvas{display:block;width:100%;height:100%;opacity:0;transition:opacity .4s}
+.model-ready #house-model-canvas{opacity:1}
+.model-controls{position:absolute;bottom:0;left:var(--gutter);right:var(--gutter);display:flex;align-items:center;justify-content:center;gap:15px;font-size:10px;z-index:2;max-width:380px;margin:auto}
+.model-controls input{width:180px;min-width:70px;accent-color:#897352;cursor:ew-resize}
+.model-controls output{min-width:33px}
+.model-construction .model-source{position:absolute;left:var(--gutter);bottom:12px;z-index:2;font-size:9px;color:#777}
+.model-construction.is-scrubbing .tech-model{inset:195px 0 305px;width:100%;height:auto}
+.model-construction.is-scrubbing .tech-feature-viewport{bottom:75px;height:205px}
+.model-construction.is-scrubbing .tech-feature{flex-basis:min(460px,36vw);width:min(460px,36vw);padding:23px;border-radius:10px}
+.model-construction.is-scrubbing .tech-feature h3{font-size:24px;margin-bottom:10px}
+.model-construction.is-scrubbing .tech-feature>p{font-size:12px;line-height:1.5}
+.model-construction.is-scrubbing .tech-feature-meta{margin-bottom:10px}
+.model-construction .model-source{bottom:0}
+@media(max-width:1100px){#catalog-panel{grid-template-columns:minmax(0,1.6fr) minmax(280px,1fr);gap:20px}.project-style-options button{flex-basis:100px}.project-colors{gap:4px}.catalog-card h3{font-size:38px}.model-controls{left:auto;margin-right:20px}}
+@media(max-height:800px) and (min-width:701px){
+ #steps.is-horizontal .steps-window{top:220px;bottom:75px}
+ #steps.is-horizontal .timeline article{padding:20px 7vw}
+ #steps.is-horizontal .timeline h3{font-size:60px;margin:15px 0}
+ .model-construction.is-scrubbing .sequence-heading{top:82px}
+ .model-construction.is-scrubbing .sequence-heading h2{font-size:34px}
+ .model-construction.is-scrubbing .tech-model{top:170px;bottom:285px}
+ .model-construction.is-scrubbing .tech-feature-viewport{height:195px}
+ .model-construction .model-source{display:none}
+}
+@media(max-width:700px){
+ .motion-ready.onepage .hero-scroll .module-hero{padding-bottom:155px}
+ .hero-gallery-controls{gap:6px;bottom:65px;display:grid;grid-template-columns:repeat(4,1fr)}
+ .hero-gallery-controls button{padding:10px 3px;font-size:9px;gap:5px;flex-direction:column;min-width:0}
+ .hero-gallery-controls button>span:first-child{font-size:8px}
+ #steps.is-horizontal .steps-window{top:230px;bottom:75px}
+ #steps.is-horizontal .timeline article{padding:30px 25px}
+ #steps.is-horizontal .timeline h3{font-size:40px;margin:25px 0}
+ #steps.is-horizontal .timeline ul{font-size:17px;padding-left:20px;line-height:1.65}
+ #catalog .module-heading h2{font-size:58px}
+ #catalog-panel{display:block;padding:0 20px 25px}
+ .catalog-tabs{display:flex;gap:0;overflow:auto;background:none}
+ .catalog-tabs button{flex:1;padding:16px 6px;white-space:nowrap;border:1px solid #ccc;font-size:12px}
+ .project-gallery{margin:0 -20px}
+ .project-photo-caption{padding:14px;font-size:17px;min-height:65px}
+ .project-photo-caption>span:last-child{font-size:10px}
+ .project-arrow,.project-enlarge{width:34px;height:34px;font-size:18px!important}
+ .project-arrow.previous{left:10px}.project-arrow.next,.project-enlarge{right:10px}
+ .project-enlarge{bottom:10px}
+ .project-style-options,#style-gallery{padding:0 14px 10px;gap:5px}
+ .project-style-options button,#style-gallery .style-option{flex:1 0 85px}
+ .project-style-options span,#style-gallery span{font-size:10px;padding:8px 1px 1px}
+ .catalog-card{padding:23px 0 0;margin:0}
+ .catalog-card h3{font-size:44px}
+ .catalog-card>p{font-size:17px}
+ .catalog-card dl{display:flex;flex-wrap:wrap;gap:10px 28px}
+ .catalog-card dl div{display:block;border:0}
+ .catalog-card dl dd{margin-top:7px}
+ .project-color-label{font-size:13px}
+ .project-colors{gap:12px;justify-content:flex-start}
+ .project-colors button{font-size:11px;gap:12px}
+ .project-colors button i{width:31px;height:31px}
+ .detail-colors{display:block;padding-top:18px}
+ .detail-colors .project-colors{width:100%;margin:15px 0}
+ #detail-exterior .project-visual{margin:0 -20px}
+ #style-gallery{margin:14px -20px 0}
+ .model-construction.is-scrubbing .tech-model{inset:185px 0 330px}
+ .model-construction.is-scrubbing .sequence-heading h2{font-size:28px}
+ .model-construction.is-scrubbing .tech-feature-viewport{height:235px;bottom:65px}
+ .model-construction.is-scrubbing .tech-feature{flex-basis:94%;width:94%;padding:22px}
+ .model-construction.is-scrubbing .tech-feature h3{font-size:24px}
+ .model-construction.is-scrubbing .tech-feature>p{font-size:12px}
+ .model-controls{left:20px;right:20px;margin:auto;gap:10px;max-width:300px;bottom:0}
+ .model-controls input{width:145px}.model-construction .model-source{display:none}
+}
+@media(max-width:700px) and (max-height:740px){
+ .hero-brand{margin-bottom:14px}.hero-content .module-hero-title h2{font-size:30px}
+ .hero-content .module-hero-title>p{font-size:12px!important;margin-top:10px}
+ .onepage .hero-content .hero-bottom{margin-top:10px;padding-top:12px}
+ .hero-content .hero-bottom p{font-size:11px;margin-bottom:10px}
+ .onepage .hero-content .hero-bottom button{font-size:18px}
+ #steps.is-horizontal .steps-window{top:200px;bottom:65px}
+ #steps.is-horizontal .timeline article{padding:22px}
+ #steps.is-horizontal .timeline h3{font-size:33px;margin:20px 0}
+ #steps.is-horizontal .timeline ul{font-size:15px}
+ .model-construction.is-scrubbing .sequence-heading{top:80px}
+ .model-construction.is-scrubbing .sequence-heading h2{font-size:24px}
+ .model-construction.is-scrubbing .tech-model{top:160px;bottom:300px}
+ .model-construction.is-scrubbing .tech-feature-viewport{height:218px;bottom:56px}
+ .model-construction.is-scrubbing .tech-feature{padding:18px}
+ .model-construction.is-scrubbing .tech-feature h3{font-size:22px}
+ .model-construction.is-scrubbing .tech-feature>p{font-size:11px}
+}
+@media(max-height:600px),(prefers-reduced-motion:reduce){
+ .motion-ready .hero-scroll{height:auto}
+ .motion-ready.onepage .hero-scroll .module-hero{height:auto;min-height:750px;position:relative;padding-bottom:150px}
+ .hero-scroll-cue{display:none}.hero-gallery-controls{bottom:35px}
+ .model-construction .tech-model{height:440px;margin-bottom:30px}
+ .hero-frame{will-change:auto}
+}
+@media(max-width:700px) and (prefers-reduced-motion:reduce){.model-construction .tech-model{height:320px}}
+.onepage #catalog-panel{height:auto;min-height:0;overflow:visible}
+.onepage .catalog-card{left:auto;right:auto;bottom:auto;top:auto}

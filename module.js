@@ -71,59 +71,85 @@
  const contactToggle = shown => {contact.hidden=!shown;bubble.setAttribute('aria-expanded',String(shown));};
  bubble.addEventListener('click',()=>contactToggle(contact.hidden));$('.contact-close').addEventListener('click',()=>{contactToggle(false);bubble.focus();});
  addEventListener('keydown',e=>{if(e.key==='Escape'&&!contact.hidden){contactToggle(false);bubble.focus();}});
- // Keyboard-accessible catalogue.
- let selected=0, selectedExterior=0, selectedPlan=0;
+ // One selection per project, shared by the inline gallery and the detail dialog.
+ let selected=0,selectedExterior=0,selectedPlan=0,selectedColor=null;
+ const selections=models.map(()=>({exterior:0,plan:0,color:null}));
+ const palette=window.IBRFacades.palette;
  $('.catalog-tabs').innerHTML=models.map((m,i)=>`<button role="tab" id="model-tab-${m.id}" aria-controls="catalog-panel" aria-selected="${i===0}" tabindex="${i===0?0:-1}">${esc(m.name)}</button>`).join('');
- function selectModel(index, focus=false){
-  selected=index;const m=models[index];
-  $$('.catalog-tabs button').forEach((b,i)=>{b.setAttribute('aria-selected',String(i===index));b.tabIndex=i===index?0:-1;});
-  $('#catalog-panel').setAttribute('aria-labelledby',`model-tab-${m.id}`);
-  $('#catalog-photo').srcset=`${m.image.replace('.webp','-small.webp')} 800w, ${m.image} ${m.width}w`;$('#catalog-photo').src=m.image;$('#catalog-photo').alt=`Пример архитектуры для «${m.name}»`;
-  if(!reduced.matches)$('#catalog-photo').animate([{opacity:.45,transform:'scale(1.025)'},{opacity:1,transform:'scale(1)'}],{duration:650,easing:'cubic-bezier(.22,1,.36,1)'});
-  $('#catalog-name').textContent=m.name;$('#catalog-tag').textContent=m.tag;
-  $('#catalog-specs').innerHTML=specs(m);
-  $('#catalog-photo').alt=`${m.name} — ${m.styles[0].name}`;
-  if(focus)$$('.catalog-tabs button')[index].focus();
+ function specs(m){return [['Размеры по плану',m.size],['Помещения',m.roomCount],['Планировки',`${m.plans.length} на выбор`]].map(([label,value])=>`<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join('');}
+ function remember(){selections[selected]={exterior:selectedExterior,plan:selectedPlan,color:selectedColor};}
+ function status(){const m=models[selected];$('#project-status').textContent=[m.name,m.styles[selectedExterior].name,selectedColor===null?'Исходное фото':palette[selectedColor].name].join(' · ');}
+ let renderVersion=0;
+ async function paintExterior(){
+  const version=++renderVersion,m=models[selected],style=m.styles[selectedExterior];
+  const key=`${m.id}/${selectedExterior+1}`;
+  const tasks=['catalog','detail'].map(async prefix=>{
+   const image=$(`#${prefix}-photo`),canvas=$(`#${prefix}-tint`);
+   image.removeAttribute('srcset');image.src=style.image;image.alt=`${m.name} — ${style.name}`;
+   return window.IBRFacades.render(style.image,canvas,key,selectedColor);
+  });
+  $('#catalog-style-name').textContent=style.name;$('#detail-facade-name').textContent=style.name;
+  const counter=`${String(selectedExterior+1).padStart(2,'0')} / ${String(m.styles.length).padStart(2,'0')}`;
+  $('#catalog-style-count').textContent=counter;$('#detail-facade-count').textContent=counter;
+  $$('[data-style-index]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.styleIndex)===selectedExterior)));
+  $$('[data-project-color]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.projectColor)===selectedColor)));
+  status();remember();
+  const results=await Promise.all(tasks);
+  if(version===renderVersion&&results.some(ok=>!ok))$('#project-status').textContent='Не удалось показать оттенок. Попробуйте выбрать цвет ещё раз.';
  }
- $$('.catalog-tabs button').forEach((b,i)=>{
-  b.addEventListener('click',()=>selectModel(i));
-  b.addEventListener('keydown',e=>{let n=i;if(e.key==='ArrowRight')n=(i+1)%models.length;else if(e.key==='ArrowLeft')n=(i-1+models.length)%models.length;else if(e.key==='Home')n=0;else if(e.key==='End')n=models.length-1;else return;e.preventDefault();selectModel(n,true);});
- });selectModel(0);
- function setDetailView(view, focus=false){
-  $$('.detail-tabs button').forEach(b=>{const on=b.dataset.view===view;b.setAttribute('aria-selected',String(on));b.tabIndex=on?0:-1;if(on&&focus)b.focus();});
-  $('#detail-exterior').hidden=view!=='exterior';$('#detail-plan').hidden=view!=='plan';
- }
- $$('.detail-tabs button').forEach(b=>{b.addEventListener('click',()=>setDetailView(b.dataset.view));b.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();setDetailView(e.key==='Home'?'exterior':e.key==='End'?'plan':b.dataset.view==='plan'?'exterior':'plan',true);}});});
- function specs(m){
-  return [['Размеры по плану',m.size],['Помещения',m.roomCount],['Планировки',`${m.plans.length} на выбор`]].map(([label,value])=>`<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join('');
- }
- function selectExterior(index){
-  selectedExterior=index;const m=models[selected],style=m.styles[index];
-  $('#detail-photo').src=style.image;$('#detail-photo').alt=`${m.name} — ${style.name}`;
-  $('#detail-facade-name').textContent=style.name;$('#detail-facade-count').textContent=`${index+1} / ${m.styles.length}`;
-  $$('#style-gallery button').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===index)));
- }
+ function selectExterior(index){selectedExterior=(index+models[selected].styles.length)%models[selected].styles.length;paintExterior();}
+ function selectColor(index){selectedColor=index;paintExterior();}
  function selectPlan(index){
-  selectedPlan=index;const m=models[selected],plan=m.plans[index];
+  selectedPlan=index;remember();const m=models[selected],plan=m.plans[index];
   $('#detail-plan-image').src=plan.image;$('#detail-plan-image').alt=`${m.name}: ${plan.name}, вид сверху`;
   $('#detail-plan-name').textContent=plan.name;$('#detail-plan-copy').textContent=plan.text;
   $('#plan-download').href=m.planPdf||plan.image;$('#plan-download').textContent=m.planPdf?'Открыть оригинал PDF ↗':'Открыть план в полном размере ↗';
   $$('#plan-options button').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===index)));
  }
- function styleGallery(m){
-  const gallery=$('#style-gallery');gallery.replaceChildren();
-  m.styles.forEach((style,i)=>{const button=document.createElement('button');button.type='button';button.className='style-option';button.setAttribute('aria-pressed',String(i===0));const image=document.createElement('img');image.src=style.image.replace('.webp','-small.webp');image.alt='';image.loading='lazy';const label=document.createElement('span');label.textContent=style.name;button.append(image,label);button.addEventListener('click',()=>selectExterior(i));gallery.append(button);});
+ function buildOptions(){
+  const m=models[selected];
+  for(const id of ['catalog-styles','style-gallery']){
+   const gallery=$(`#${id}`);gallery.replaceChildren();
+   m.styles.forEach((style,i)=>{const button=document.createElement('button');button.type='button';button.className='style-option';button.dataset.styleIndex=i;button.setAttribute('aria-pressed',String(i===selectedExterior));const image=document.createElement('img');image.src=style.image.replace('.webp','-small.webp');image.alt='';image.loading='lazy';const label=document.createElement('span');label.textContent=style.name;button.append(image,label);button.addEventListener('click',()=>selectExterior(i));gallery.append(button);});
+  }
+  for(const id of ['catalog-colors','detail-colors']){
+   const colors=$(`#${id}`);colors.replaceChildren();
+   palette.forEach((color,i)=>{const b=document.createElement('button');b.type='button';b.dataset.projectColor=i;b.setAttribute('aria-pressed',String(i===selectedColor));b.setAttribute('aria-label',`Цвет фасада: ${color.name}`);b.innerHTML=`<i style="--swatch:${color.hex}" aria-hidden="true"></i><span>${color.name}</span>`;b.addEventListener('click',()=>selectColor(i));colors.append(b);});
+  }
   const plans=$('#plan-options');plans.replaceChildren();
-  m.plans.forEach((plan,i)=>{const button=document.createElement('button');button.type='button';button.textContent=`${String(i+1).padStart(2,'0')} / ${plan.name}`;button.setAttribute('aria-pressed',String(i===0));button.addEventListener('click',()=>selectPlan(i));plans.append(button);});
-  selectExterior(0);selectPlan(0);
+  m.plans.forEach((plan,i)=>{const button=document.createElement('button');button.type='button';button.textContent=`${String(i+1).padStart(2,'0')} / ${plan.name}`;button.setAttribute('aria-pressed',String(i===selectedPlan));button.addEventListener('click',()=>selectPlan(i));plans.append(button);});
  }
+ function selectModel(index,focus=false){
+  selected=index;const m=models[index],s=selections[index];selectedExterior=s.exterior;selectedPlan=s.plan;selectedColor=s.color;
+  $$('.catalog-tabs button').forEach((b,i)=>{b.setAttribute('aria-selected',String(i===index));b.tabIndex=i===index?0:-1;});
+  $('#catalog-panel').setAttribute('aria-labelledby',`model-tab-${m.id}`);
+  $('#catalog-name').textContent=m.name;$('#catalog-tag').textContent=m.tag;$('#catalog-specs').innerHTML=specs(m);
+  buildOptions();paintExterior();selectPlan(selectedPlan);
+  if(focus)$$('.catalog-tabs button')[index].focus();
+ }
+ $$('.catalog-tabs button').forEach((b,i)=>{b.addEventListener('click',()=>selectModel(i));b.addEventListener('keydown',e=>{let n=i;if(e.key==='ArrowRight')n=(i+1)%models.length;else if(e.key==='ArrowLeft')n=(i-1+models.length)%models.length;else if(e.key==='Home')n=0;else if(e.key==='End')n=models.length-1;else return;e.preventDefault();selectModel(n,true);});});
+ $$('[data-style-prev]').forEach(b=>b.addEventListener('click',()=>selectExterior(selectedExterior-1)));
+ $$('[data-style-next]').forEach(b=>b.addEventListener('click',()=>selectExterior(selectedExterior+1)));
+ $$('[data-color-reset]').forEach(b=>b.addEventListener('click',()=>selectColor(null)));
+ $$('.project-visual').forEach(view=>{
+  view.addEventListener('keydown',e=>{if(e.target!==view)return;if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();selectExterior(selectedExterior+(e.key==='ArrowRight'?1:-1));}});
+  let start=null;
+  view.addEventListener('touchstart',e=>{start=e.touches.length===1?{x:e.touches[0].clientX,y:e.touches[0].clientY}:null;},{passive:true});
+  view.addEventListener('touchend',e=>{if(!start)return;const dx=e.changedTouches[0].clientX-start.x,dy=e.changedTouches[0].clientY-start.y;if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.4)selectExterior(selectedExterior+(dx<0?1:-1));start=null;},{passive:true});
+ });
+ function setDetailView(view,focus=false){
+  $$('.detail-tabs button').forEach(b=>{const on=b.dataset.view===view;b.setAttribute('aria-selected',String(on));b.tabIndex=on?0:-1;if(on&&focus)b.focus();});
+  $('#detail-exterior').hidden=view!=='exterior';$('#detail-plan').hidden=view!=='plan';
+ }
+ $$('.detail-tabs button').forEach(b=>{b.addEventListener('click',()=>setDetailView(b.dataset.view));b.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();setDetailView(e.key==='Home'?'exterior':e.key==='End'?'plan':b.dataset.view==='plan'?'exterior':'plan',true);}});});
  function showModel(view){
   const m=models[selected];$('#detail-title').textContent=m.name;$('#detail-copy').textContent=m.text;
   $('#detail-specs').innerHTML=specs(m);$('#detail-rooms').innerHTML=m.rooms.map(r=>`<li>${esc(r)}</li>`).join('');
-  styleGallery(m);setDetailView(view);openDialog($('#model-dialog'));$('#model-dialog').scrollTop=0;
+  setDetailView(view);openDialog($('#model-dialog'));$('#model-dialog').scrollTop=0;
  }
  $('#model-details').addEventListener('click',()=>showModel('exterior'));
  $('#model-plan').addEventListener('click',()=>showModel('plan'));
+ selectModel(0);
  function lightbox(src,alt,caption,isPlan=false){
   const box=$('#lightbox');box.classList.remove('is-zoomed');box.classList.toggle('is-plan',isPlan);
   $('#lightbox-scale').setAttribute('aria-pressed','false');$('#lightbox-scale').textContent='Увеличить +';
@@ -135,7 +161,14 @@
   const canvas=$('#lightbox .lightbox-canvas');
   requestAnimationFrame(()=>canvas.scrollTo({left:zoomed?(canvas.scrollWidth-canvas.clientWidth)/2:0,top:zoomed?(canvas.scrollHeight-canvas.clientHeight)/2:0,behavior:'instant'}));
  });
- $('#detail-zoom').addEventListener('click',()=>{const m=models[selected],style=m.styles[selectedExterior];lightbox(style.image,`${m.name} — ${style.name}`,'Визуализация проекта · '+m.name+' · '+style.name);});
+ async function enlargeProject(prefix){
+  const m=models[selected],style=m.styles[selectedExterior],canvas=$(`#${prefix}-tint`),color=selectedColor;
+  if(color!==null)await window.IBRFacades.render(style.image,canvas,`${m.id}/${selectedExterior+1}`,color);
+  const src=color!==null&&canvas.classList.contains('is-ready')?canvas.toDataURL('image/jpeg',.94):style.image;
+  lightbox(src,`${m.name} — ${style.name}`,[m.name,style.name,color===null?'Исходное фото':palette[color].name].join(' · '));
+ }
+ $('#detail-zoom').addEventListener('click',()=>enlargeProject('detail'));
+ $('#catalog-zoom').addEventListener('click',()=>enlargeProject('catalog'));
  $('#plan-zoom').addEventListener('click',()=>{const m=models[selected],plan=m.plans[selectedPlan];lightbox(plan.image,`${m.name}: ${plan.name}, вид сверху`,m.name+' · '+plan.name+' · Используйте увеличение, чтобы рассмотреть размеры.',true);});
  $$('[data-stock]').forEach(b=>b.addEventListener('click',()=>{const img=b.querySelector('img');lightbox(img.dataset.full||img.currentSrc||img.src,img.alt,img.alt+' · IBR HOMES');}));
  function article(title,label,paragraphs){$('#article-title').textContent=title;$('#article-label').textContent=label;$('#article-body').replaceChildren();paragraphs.forEach(p=>{const el=document.createElement('p');el.textContent=p;$('#article-body').append(el);});openDialog($('#article-dialog'));$('#article-dialog').scrollTop=0;}
@@ -178,13 +211,13 @@
  form.addEventListener('input',e=>{if(e.target.setCustomValidity)e.target.setCustomValidity('');$('#quiz-error').textContent='';});
  function openQuiz(nextMode='full',model=null){
   contactToggle(false);if($('#model-dialog').open)$('#model-dialog').close();
-  step=0;if(model){answers.project=model.project;answers.model=model.name;}
+  step=0;if(model){answers.project=model.project;answers.model=model.name;answers.style=model.styles[selectedExterior].name;answers.color=selectedColor===null?null:palette[selectedColor].name;answers.plan=model.plans[selectedPlan].name;}
   $('#quiz-context').textContent='Расчёт стоимости проекта';openDialog($('#quiz'));render();
  }
  $$('[data-quiz]').forEach(b=>b.addEventListener('click',()=>openQuiz(b.dataset.quiz)));
  $('#detail-order').addEventListener('click',()=>openQuiz('full',models[selected]));
  $('#quiz-back').addEventListener('click',()=>{capture();if(step>0){step--;render();}});
- const labels={project:'Проект',model:'Формат из каталога',plot:'Есть земельный участок',city:'Город строительства',timing:'Начало строительства',area:'Интересующая площадь',firstName:'Имя',lastName:'Фамилия',phone:'Телефон'};
+ const labels={project:'Проект',model:'Формат из каталога',style:'Стиль дома',color:'Цвет фасада',plan:'Планировка',plot:'Есть земельный участок',city:'Город строительства',timing:'Начало строительства',area:'Интересующая площадь',firstName:'Имя',lastName:'Фамилия',phone:'Телефон'};
  function summary(){
   form.hidden=true;$('#quiz-result').hidden=false;$('#quiz-summary').replaceChildren();
   const lines=[t('Здравствуйте! Хочу рассчитать стоимость проекта IBR HOMES.')];
@@ -195,7 +228,7 @@
   $('#quiz-status').textContent='';$('#quiz-result h2').focus({preventScroll:true});$('#quiz').scrollTop=0;
  }
  addEventListener('ibr:language',()=>{if($('#quiz').open&&!$('#quiz-result').hidden)summary();form.querySelectorAll('input').forEach(el=>el.setCustomValidity(''));});
- form.addEventListener('change',e=>{if(e.target.name==='project'&&answers.model){const m=models.find(m=>m.name===answers.model);if(m?.project!==e.target.value)delete answers.model;}});
+ form.addEventListener('change',e=>{if(e.target.name==='project'&&answers.model){const m=models.find(m=>m.name===answers.model);if(m?.project!==e.target.value)['model','style','color','plan'].forEach(key=>delete answers[key]);}});
  form.addEventListener('submit',e=>{e.preventDefault();if(!validate())return;capture();if(step<pages.length-1){step++;render();}else summary();});
  $('#quiz-edit').addEventListener('click',()=>{step=0;render();});
  $('#quiz-send').addEventListener('click',()=>{$('#quiz-status').textContent='Сообщение подготовлено. Нажмите «Отправить» в WhatsApp. Открытие окна не означает отправку заявки.';});
