@@ -3,7 +3,8 @@ window.IBR_MODELS = [
   {
     "id": "house-s",
     "name": "Дом S",
-    "image": "assets/client/barn.webp",
+    "image": "assets/photos/house-03.webp",
+    "width": 1600,
     "tag": "Компактный формат. Всё необходимое.",
     "text": "Дом для загородных выходных или постоянного проживания. Вместе определим состав помещений, продуманное хранение и связь с террасой.",
     "rooms": [
@@ -15,27 +16,32 @@ window.IBR_MODELS = [
     "project": "Дом",
     "styles": [
       {
-        "name": "Немецкий фахверк",
-        "image": "assets/client/german.webp"
+        "name": "Деревянный фасад",
+        "image": "assets/photos/house-04.webp",
+    "width": 1600
       },
       {
-        "name": "Итальянский фахверк",
-        "image": "assets/client/italian.webp"
+        "name": "Панорамные окна",
+        "image": "assets/photos/house-02.webp",
+    "width": 1038
       },
       {
-        "name": "Хай-тек",
-        "image": "assets/client/hightech.webp"
+        "name": "Дом с террасой",
+        "image": "assets/photos/house-08.webp",
+    "width": 1100
       },
       {
-        "name": "Барнхаус",
-        "image": "assets/client/barn.webp"
+        "name": "Тёмный фасад",
+        "image": "assets/photos/house-06.webp",
+    "width": 1280
       }
     ]
   },
   {
     "id": "house-m",
     "name": "Дом M",
-    "image": "assets/client/hightech.webp",
+    "image": "assets/photos/house-07.webp",
+    "width": 1280,
     "tag": "Пространство для вашего ритма жизни.",
     "text": "Сбалансированное решение для семьи. Планировку разрабатываем с учётом ваших привычек, участка и пожеланий к общим и отдельным комнатам.",
     "rooms": [
@@ -47,27 +53,32 @@ window.IBR_MODELS = [
     "project": "Дом",
     "styles": [
       {
-        "name": "Немецкий фахверк",
-        "image": "assets/client/german.webp"
+        "name": "Деревянный фасад",
+        "image": "assets/photos/house-04.webp",
+    "width": 1600
       },
       {
-        "name": "Итальянский фахверк",
-        "image": "assets/client/italian.webp"
+        "name": "Панорамные окна",
+        "image": "assets/photos/house-02.webp",
+    "width": 1038
       },
       {
-        "name": "Хай-тек",
-        "image": "assets/client/hightech.webp"
+        "name": "Дом с террасой",
+        "image": "assets/photos/house-08.webp",
+    "width": 1100
       },
       {
-        "name": "Барнхаус",
-        "image": "assets/client/barn.webp"
+        "name": "Тёмный фасад",
+        "image": "assets/photos/house-06.webp",
+    "width": 1280
       }
     ]
   },
   {
     "id": "house-l",
     "name": "Дом L",
-    "image": "assets/client/german.webp",
+    "image": "assets/photos/house-08.webp",
+    "width": 1100,
     "tag": "Больше возможностей для всей семьи.",
     "text": "Просторный дом с индивидуальным набором помещений. Предусмотрим место для семейных встреч, работы, гостей и спокойного отдыха.",
     "rooms": [
@@ -79,27 +90,32 @@ window.IBR_MODELS = [
     "project": "Дом",
     "styles": [
       {
-        "name": "Немецкий фахверк",
-        "image": "assets/client/german.webp"
+        "name": "Деревянный фасад",
+        "image": "assets/photos/house-04.webp",
+    "width": 1600
       },
       {
-        "name": "Итальянский фахверк",
-        "image": "assets/client/italian.webp"
+        "name": "Панорамные окна",
+        "image": "assets/photos/house-02.webp",
+    "width": 1038
       },
       {
-        "name": "Хай-тек",
-        "image": "assets/client/hightech.webp"
+        "name": "Дом с террасой",
+        "image": "assets/photos/house-08.webp",
+    "width": 1100
       },
       {
-        "name": "Барнхаус",
-        "image": "assets/client/barn.webp"
+        "name": "Тёмный фасад",
+        "image": "assets/photos/house-06.webp",
+    "width": 1280
       }
     ]
   },
   {
     "id": "bath-s",
     "name": "Баня S",
-    "image": "assets/client/bath-barn.webp",
+    "image": "assets/photos/house-01.webp",
+    "width": 1578,
     "tag": "Личное место для отдыха.",
     "text": "Компактная баня на вашем участке. Обсудим парную, моечную, отдых и необходимые инженерные системы.",
     "rooms": [
@@ -111,23 +127,32 @@ window.IBR_MODELS = [
     "project": "Баня",
     "styles": [
       {
-        "name": "Хай-тек",
-        "image": "assets/client/bath-hightech.webp"
+        "name": "Деревянный фасад",
+        "image": "assets/photos/house-04.webp",
+    "width": 1600
       },
       {
-        "name": "Барнхаус",
-        "image": "assets/client/bath-barn.webp"
+        "name": "Панорамные окна",
+        "image": "assets/photos/house-02.webp",
+    "width": 1038
       },
       {
-        "name": "Фахверк",
-        "image": "assets/client/bath-fachwerk.webp"
+        "name": "Дом с террасой",
+        "image": "assets/photos/house-08.webp",
+    "width": 1100
+      },
+      {
+        "name": "Тёмный фасад",
+        "image": "assets/photos/house-06.webp",
+    "width": 1280
       }
     ]
   },
   {
     "id": "bath-m",
     "name": "Баня M",
-    "image": "assets/client/bath-hightech.webp",
+    "image": "assets/photos/house-05.webp",
+    "width": 1280,
     "tag": "Отдых, которым хочется делиться.",
     "text": "Баня для отдыха с семьёй и друзьями. Подберём планировку, комплектацию и архитектурный стиль под участок и ваши сценарии отдыха.",
     "rooms": [
@@ -139,37 +164,25 @@ window.IBR_MODELS = [
     "project": "Баня",
     "styles": [
       {
-        "name": "Хай-тек",
-        "image": "assets/client/bath-hightech.webp"
+        "name": "Деревянный фасад",
+        "image": "assets/photos/house-04.webp",
+    "width": 1600
       },
       {
-        "name": "Барнхаус",
-        "image": "assets/client/bath-barn.webp"
+        "name": "Панорамные окна",
+        "image": "assets/photos/house-02.webp",
+    "width": 1038
       },
       {
-        "name": "Фахверк",
-        "image": "assets/client/bath-fachwerk.webp"
+        "name": "Дом с террасой",
+        "image": "assets/photos/house-08.webp",
+    "width": 1100
+      },
+      {
+        "name": "Тёмный фасад",
+        "image": "assets/photos/house-06.webp",
+    "width": 1280
       }
     ]
   }
-];
-window.IBR_ARTICLES = [
- {title:'С чего начинается проект дома',image:'assets/client/barn-small.webp',label:'Планирование',paragraphs:[
- 'Начните со сценариев жизни: сколько человек живёт постоянно, нужны ли гостевые комнаты, где вы работаете и как проводите выходные. Такой список помогает обсуждать планировку предметно.',
- 'Разделите пожелания на обязательные и желательные. Например: отдельная спальня для каждого ребёнка — обязательное, большая терраса — желательное. Это помогает выбирать, когда площадь ограничена.',
- 'Сохраните несколько примеров архитектуры и поясните, что именно нравится: форма крыши, свет, материалы или связь с садом. Картинки без комментариев легко понять по-разному.',
- 'Для первого разговора подготовьте город, желаемую площадь, состав помещений, информацию об участке и ориентир по бюджету. Итогом обсуждения должно стать понятное задание на проект.'
- ]},
- {title:'Что подготовить об участке',image:'assets/client/german-small.webp',label:'Участок',paragraphs:[
- 'Соберите фотографии с разных сторон, примерные размеры участка и схему подъезда. Отметьте, какие деревья, постройки и виды хотелось бы сохранить.',
- 'Расскажите, есть ли электричество, вода и канализация, где они находятся и что о них известно. Неизвестные параметры лучше обозначить заранее.',
- 'Покажите узкие повороты, уклон и препятствия на подъезде. Возможность доставки и расположение техники обсуждаются до выбора окончательной конструкции.',
- 'Это исходные данные для разговора. Необходимые обследования, документы, ограничения и решение по основанию определяются специалистами для конкретного участка.'
- ]},
- {title:'Как сравнивать комплектации',image:'assets/client/hightech-small.webp',label:'Стоимость',paragraphs:[
- 'Название «под ключ» само по себе не объясняет состав работ. Сравнивайте предложения по подробному перечню материалов, работ и исключений.',
- 'Отдельно проверьте основание, доставку, монтаж, окна, утепление, внутреннюю отделку и инженерные системы. Уточните, где заканчивается ответственность каждой стороны.',
- 'Попросите указать, что включено в цену, что считается отдельно и какие исходные данные ещё нужны. Это полезнее сравнения только цены за квадратный метр.',
- 'В нашей анкете можно указать тип проекта, площадь и сроки строительства. Окончательный состав, стоимость и сроки команда согласует после обсуждения проекта.'
- ]}
 ];

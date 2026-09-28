@@ -1,34 +1,73 @@
 'use strict';
 (() => {
- const construction=document.querySelector('#construction');
- if(!construction)return;
- const video=construction.querySelector('video');
- const reduce=matchMedia('(prefers-reduced-motion: reduce)');
- const autoplay=()=>innerWidth<=900||innerHeight<=600;
- const clamp=x=>Math.max(0,Math.min(1,x));
- const progress=el=>reduce.matches?0:clamp(-el.getBoundingClientRect().top/Math.max(1,el.offsetHeight-innerHeight));
- let raf=0,started=false,wantedTime=0;
- function seek(){if(autoplay()&&!reduce.matches)return;if(video.readyState>=1&&!video.seeking&&Math.abs(video.currentTime-wantedTime)>.045)video.currentTime=wantedTime;}
- video.addEventListener('seeked',seek);
- video.addEventListener('loadedmetadata',()=>{schedule();});video.addEventListener('loadeddata',schedule);
- video.addEventListener('error',()=>{construction.querySelector('.sequence-status').textContent='Видео недоступно';});
- function render(){
-  raf=0;
-  const a=progress(construction);
-  construction.style.setProperty('--sequence-progress',a);
-  const r=construction.getBoundingClientRect();
-  if(!started&&r.top<innerHeight*2){started=true;fetch('assets/assembly/construction.mp4').then(r=>{if(!r.ok)throw new Error('video');return r.blob();}).then(blob=>{video.src=URL.createObjectURL(blob);video.load();}).catch(()=>{construction.querySelector('.sequence-status').textContent='Видео недоступно';});}
-  if(Number.isFinite(video.duration)&&video.duration>0){
-   const small=autoplay();
-   if(small&&!reduce.matches){
-    const model=construction.querySelector('.tech-model').getBoundingClientRect();
-    if(!document.hidden&&model.top<innerHeight&&model.bottom>0){video.loop=true;if(video.paused)video.play().catch(()=>{});}else video.pause();
-   }else{video.pause();video.loop=false;wantedTime=(reduce.matches?1:a)*Math.max(0,video.duration-.06);seek();}
-   construction.querySelector('.sequence-status').textContent=small&&!reduce.matches?'Сборка дома ↻':`${reduce.matches?100:Math.round(a*100)}%`;
+ const section=document.querySelector('.photo-construction');
+ const model=section?.querySelector('.tech-model');
+ const canvas=model?.querySelector('.assembly-canvas');
+ if(!canvas)return;
+ const pieces=[...canvas.querySelectorAll('.assembly-piece')];
+ const final=canvas.querySelector('.assembly-complete');
+ const status=section.querySelector('.sequence-status');
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+ const clamp=n=>Math.max(0,Math.min(1,n));
+ const ease=n=>1-Math.pow(1-clamp(n),3);
+ const mobile=()=>innerWidth<=900||innerHeight<=600;
+ const stages=[
+  {start:0,end:0,x:0,y:0},
+  {start:.05,end:.28,x:-125,y:-35},
+  {start:.15,end:.40,x:-90,y:-135},
+  {start:.27,end:.52,x:0,y:-175},
+  {start:.39,end:.64,x:85,y:-140},
+  {start:.51,end:.77,x:155,y:-50},
+  {start:.64,end:.94,x:0,y:-210}
+ ];
+ let frame=0,visible=false,last=0,elapsed=0;
+ function pose(progress){
+  const p=reduced.matches?1:progress;
+  pieces.forEach((piece,i)=>{
+   const stage=stages[i];
+   const t=i===0?1:clamp((p-stage.start)/(stage.end-stage.start));
+   const e=ease(t);
+   piece.style.opacity=clamp(t*3);
+   piece.style.transform=`translate3d(${stage.x*(1-e)}px,${stage.y*(1-e)}px,0)`;
+  });
+  final.style.opacity=clamp((p-.94)/.06);
+  section.style.setProperty('--sequence-progress',p);
+  const label=p<.16?'Основание':p<.5?'Стены и остекление':p<.7?'Терраса':p<.94?'Кровля':'Дом собран';
+  const nextStatus=mobile()&&!reduced.matches?`${label} ↻`:label;
+  if(status.textContent!==nextStatus)status.textContent=nextStatus;
+ }
+ function draw(now){
+  frame=0;
+  if(document.hidden){last=0;return;}
+  if(reduced.matches){pose(1);last=0;return;}
+  if(mobile()){
+   if(!visible){last=0;return;}
+   if(last)elapsed+=Math.min(100,now-last);
+   last=now;
+   const t=elapsed%12000;
+   const progress=t<8000?t/8000:t<10500?1:1-(t-10500)/1500;
+   pose(progress);frame=requestAnimationFrame(draw);
+  }else{
+   last=0;
+   const progress=clamp(-section.getBoundingClientRect().top/Math.max(1,section.offsetHeight-innerHeight));
+   pose(clamp(progress/.92));
   }
  }
- function schedule(){if(!raf)raf=requestAnimationFrame(render);}
- document.addEventListener('visibilitychange',()=>{if(document.hidden)video.pause();else schedule();});
- new IntersectionObserver(schedule).observe(construction.querySelector('.tech-model'));
- addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule);reduce.addEventListener('change',schedule);schedule();
+ function schedule(){if(!frame)frame=requestAnimationFrame(draw);}
+ function resize(){
+  canvas.style.setProperty('--assembly-width',`${Math.min(model.clientWidth,model.clientHeight*1.5,1150)}px`);
+  last=0;schedule();
+ }
+ if('IntersectionObserver' in window){
+  new IntersectionObserver(entries=>{
+   visible=entries[0].isIntersecting;
+   if(!visible){cancelAnimationFrame(frame);frame=0;last=0;}
+   else schedule();
+  }).observe(model);
+ }else visible=true;
+ if('ResizeObserver' in window)new ResizeObserver(resize).observe(model);
+ addEventListener('scroll',schedule,{passive:true});addEventListener('resize',resize);addEventListener('load',resize);
+ reduced.addEventListener('change',()=>{elapsed=0;resize();});
+ document.addEventListener('visibilitychange',()=>{last=0;if(document.hidden){cancelAnimationFrame(frame);frame=0;}else schedule();});
+ section.classList.add('assembly-ready');pose(reduced.matches?1:0);resize();
 })();

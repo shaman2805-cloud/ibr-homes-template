@@ -77,7 +77,7 @@
   selected=index;const m=models[index];
   $$('.catalog-tabs button').forEach((b,i)=>{b.setAttribute('aria-selected',String(i===index));b.tabIndex=i===index?0:-1;});
   $('#catalog-panel').setAttribute('aria-labelledby',`model-tab-${m.id}`);
-  $('#catalog-photo').srcset=`${m.image.replace('.webp','-small.webp')} 800w, ${m.image} 1920w`;$('#catalog-photo').src=m.image;$('#catalog-photo').alt=`Визуализация концепции «${m.name}»`;
+  $('#catalog-photo').srcset=`${m.image.replace('.webp','-small.webp')} 800w, ${m.image} ${m.width}w`;$('#catalog-photo').src=m.image;$('#catalog-photo').alt=`Пример архитектуры для «${m.name}»`;
   if(!reduced.matches)$('#catalog-photo').animate([{opacity:.45,transform:'scale(1.025)'},{opacity:1,transform:'scale(1)'}],{duration:650,easing:'cubic-bezier(.22,1,.36,1)'});
   $('#catalog-name').textContent=m.name;$('#catalog-tag').textContent=m.tag;
   if(focus)$$('.catalog-tabs button')[index].focus();
@@ -93,14 +93,14 @@
  $$('.detail-tabs button').forEach(b=>{b.addEventListener('click',()=>setDetailView(b.dataset.view));b.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();setDetailView(e.key==='Home'?'exterior':e.key==='End'?'plan':b.dataset.view==='plan'?'exterior':'plan',true);}});});
  function styleGallery(m){
   const gallery=$('#style-gallery');gallery.replaceChildren();
-  m.styles.forEach(style=>{const button=document.createElement('button');button.type='button';button.className='style-option';const image=document.createElement('img');image.src=style.image.replace('.webp','-small.webp');image.alt=style.name;image.loading='lazy';const label=document.createElement('span');label.textContent=style.name+' ↗';button.append(image,label);button.addEventListener('click',()=>lightbox(style.image,style.name,'Архитектурная визуализация · '+style.name));gallery.append(button);});
+  m.styles.forEach(style=>{const button=document.createElement('button');button.type='button';button.className='style-option';const image=document.createElement('img');image.src=style.image.replace('.webp','-small.webp');image.alt=style.name;image.loading='lazy';const label=document.createElement('span');label.textContent=style.name+' ↗';button.append(image,label);button.addEventListener('click',()=>lightbox(style.image,style.name,'Фотография · '+style.name));gallery.append(button);});
  }
  $('#model-details').addEventListener('click',()=>{
-  const m=models[selected];$('#detail-title').textContent=m.name;$('#detail-copy').textContent=m.text;$('#detail-photo').src=m.image;$('#detail-photo').alt=`Концепция «${m.name}»`;
+  const m=models[selected];$('#detail-title').textContent=m.name;$('#detail-copy').textContent=m.text;$('#detail-photo').src=m.image;$('#detail-photo').alt=`Пример архитектуры для «${m.name}»`;
   $('#detail-rooms').innerHTML=m.rooms.map(r=>`<li>${esc(r)}</li>`).join('');styleGallery(m);setDetailView('exterior');openDialog($('#model-dialog'));$('#model-dialog').scrollTop=0;
  });
  function lightbox(src,alt,caption){$('#lightbox-image').src=src;$('#lightbox-image').alt=alt;$('#lightbox-caption').textContent=caption;openDialog($('#lightbox'));}
- $('#detail-zoom').addEventListener('click',()=>lightbox(models[selected].image,models[selected].name,'Концептуальная визуализация. Не фотография построенного объекта.'));
+ $('#detail-zoom').addEventListener('click',()=>lightbox(models[selected].image,models[selected].name,'Фото для выбора архитектуры. Планировку и комплектацию согласуем отдельно.'));
  $$('[data-stock]').forEach(b=>b.addEventListener('click',()=>{const img=b.querySelector('img');lightbox(img.dataset.full||img.currentSrc||img.src,img.alt,img.alt+' · IBR HOMES');}));
  function article(title,label,paragraphs){$('#article-title').textContent=title;$('#article-label').textContent=label;$('#article-body').replaceChildren();paragraphs.forEach(p=>{const el=document.createElement('p');el.textContent=p;$('#article-body').append(el);});openDialog($('#article-dialog'));$('#article-dialog').scrollTop=0;}
  $('#privacy-open').addEventListener('click',()=>article('Как работает заявка','Данные в форме',[
