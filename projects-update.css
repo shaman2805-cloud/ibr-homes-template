@@ -154,5 +154,13 @@
  .hero-frame{will-change:auto}
 }
 @media(max-width:700px) and (prefers-reduced-motion:reduce){.model-construction .tech-model{height:320px}}
+/* Keep the reviewed Kazakh copy fully visible beside the rotating house. */
+@media(max-width:700px) and (min-height:601px){
+ .model-construction.is-scrubbing .tech-feature-viewport{height:260px}
+ .model-construction.is-scrubbing .tech-model{bottom:335px}
+}
+@media(max-width:700px) and (min-height:601px) and (max-height:740px){
+ .model-construction.is-scrubbing .tech-model{bottom:326px}
+}
 .onepage #catalog-panel{height:auto;min-height:0;overflow:visible}
 .onepage .catalog-card{left:auto;right:auto;bottom:auto;top:auto}

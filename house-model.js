@@ -93,7 +93,8 @@ async function initialize(){
   new ResizeObserver(resize).observe(host);resize();sync();schedule();section.classList.add('model-ready');section.dataset.modelState='ready';slider.disabled=false;
   canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();cancelAnimationFrame(frame);frame=0;section.classList.remove('model-ready');section.dataset.modelState='fallback';slider.disabled=true;});
   canvas.addEventListener('webglcontextrestored',()=>{section.classList.add('model-ready');section.dataset.modelState='ready';slider.disabled=false;resize();});
- }catch(error){section.dataset.modelState='fallback';slider.disabled=true;section.classList.remove('model-ready');section.querySelector('.model-source').textContent=window.IBRI18N?.t('Визуализация барнхауса')||'Визуализация барнхауса';}
+ // Keep the Russian source so the translation observer can restore it on RU/ҚАЗ changes.
+ }catch(error){section.dataset.modelState='fallback';slider.disabled=true;section.classList.remove('model-ready');section.querySelector('.model-source').textContent='Визуализация барнхауса';}
 }
 new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible){initialize();controller?.schedule();}},{rootMargin:'250px'}).observe(host);
 slider.addEventListener('input',()=>{

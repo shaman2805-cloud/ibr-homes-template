@@ -22,7 +22,7 @@ window.IBR_MODELS = [
         "width": 1920
       },
       {
-        "name": "Барн",
+        "name": "Барнхаус",
         "image": "assets/catalog/house-s/exterior-2.webp",
         "width": 1920
       },
@@ -73,7 +73,7 @@ window.IBR_MODELS = [
         "width": 1920
       },
       {
-        "name": "Барн",
+        "name": "Барнхаус",
         "image": "assets/catalog/house-m/exterior-2.webp",
         "width": 1920
       },
@@ -124,7 +124,7 @@ window.IBR_MODELS = [
         "width": 1920
       },
       {
-        "name": "Барн",
+        "name": "Барнхаус",
         "image": "assets/catalog/house-l/exterior-2.webp",
         "width": 1920
       },

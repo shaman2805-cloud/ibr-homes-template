@@ -111,3 +111,27 @@
  .footer-instagram{font-size:15px}
 }
 @media(prefers-reduced-motion:reduce){.faq-list details>p{animation:none}}
+
+/* Final invitation: matching pill controls and one accessible Instagram icon. */
+#contacts h2{max-width:1120px;margin:42px 0 30px;font-size:clamp(48px,6.8vw,108px);text-wrap:balance}
+.footer-intro{max-width:690px;font-size:18px;line-height:1.6;color:#65635f}
+.footer-actions{display:flex;flex-wrap:wrap;gap:14px;margin:32px 0 48px}
+#contacts .footer-actions .pill{min-height:60px;padding:17px 28px;gap:38px;font-size:17px}
+#contacts .footer-actions .pill span{font-size:24px;line-height:1}
+#contacts .footer-links{display:flex;align-items:center;justify-content:space-between;gap:20px}
+#contacts .footer-top{min-height:48px;padding:12px 22px;font-size:14px}
+#contacts .footer-top:hover{opacity:1}
+#contacts .footer-instagram{width:44px;height:44px;justify-content:center;padding:0;border-radius:50%;flex:none}
+#contacts .footer-instagram:hover{background:#ffffff70;opacity:1}
+#contacts .footer-bottom{display:grid;grid-template-columns:1fr 44px 1fr;align-items:center}
+#contacts .design-credit{justify-self:end}
+@media(max-width:700px){
+ #contacts h2{font-size:clamp(39px,9.5vw,60px);margin:30px 0 24px;overflow-wrap:normal}
+ .footer-intro{font-size:16px;line-height:1.55}
+ .footer-actions{display:grid;grid-template-columns:1fr;margin:26px 0 34px}
+ #contacts .footer-actions .pill{width:100%;justify-content:space-between;gap:18px;padding:17px 22px;font-size:15px}
+ #contacts .footer-links{flex-wrap:wrap;gap:20px}
+ #contacts .footer-links>a:first-child{font-size:25px}
+ #contacts .footer-bottom{grid-template-columns:1fr 44px;gap:14px;padding-right:60px}
+ #contacts .design-credit{grid-column:1/-1;justify-self:start}
+}

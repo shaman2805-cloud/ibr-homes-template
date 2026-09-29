@@ -12,7 +12,7 @@
   const text=normalize(value);if(language==='ru'||!text)return text;
   if(dictionary[text])return dictionary[text];
   if(/^(Дом|Баня) [SML]$/.test(text))return text.replace(/^Дом /,'Үй ').replace(/^Баня /,'Монша ');
-  if(/^\d+ этап$/.test(text))return text.replace('этап','кезең');
+  if(/^\d+ этап$/.test(text))return `${Number.parseInt(text,10)}-кезең`;
   if(/^\d+ на выбор$/.test(text))return text.replace('на выбор','нұсқа');
   if(/^Вопрос \d+ из 5$/.test(text))return text.replace(/^Вопрос (\d+) из 5$/,'5 сұрақтың $1-сі');
   if(/^\d+ \/ \d+ ПРЕИМУЩЕСТВ$/.test(text))return text.replace('ПРЕИМУЩЕСТВ','АРТЫҚШЫЛЫҚ');
